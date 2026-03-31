@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Intelligence - Ravi Kashyap</title>
+<meta name="description" content="Nine professional-grade AI prompts for deep literature analysis, contradiction mapping, gap finding, and synthesis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./theme.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body class="collection-page page-research">
+<div class="bg-canvas">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="glow g4"></div>
+  <div class="glow g5"></div>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav id="navbar" class="site-nav">
+  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-orbit logo-orbit-a"></span>
+      <span class="logo-orbit logo-orbit-b"></span>
+      <span class="logo-mark-text">RK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+  </ul>
+  <a class="btn btn-outline nav-cta" href="./index.html">Back To Hub</a>
+</nav>
+
+<main class="page">
+  <section class="hero" id="hero">
+    <canvas id="research-hero-canvas" class="hero-canvas"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        Collection 03 / Research Intelligence
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-line"><span class="hero-line-inner">9 Prompts That</span></span>
+        <span class="hero-line"><span class="hero-line-inner">Think Like</span></span>
+        <span class="hero-line"><span class="hero-line-inner"><span class="gradient-text">A Scientist.</span></span></span>
+      </h1>
+
+      <p class="hero-sub">
+        Professional-grade prompts for deep academic literature analysis. Built for researchers, students, and knowledge workers who need structure, contradiction-finding, and synthesis rather than shallow summaries.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="#prompts">Explore All 9</a>
+        <button class="btn btn-outline btn-lg" id="copy-intake-btn" type="button">Copy Prompt 01</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="research-stat-1">00</div>
+          <div class="stat-label">Upgraded Prompts</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="research-stat-2">00</div>
+          <div class="stat-label">Papers Per Run</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="research-stat-3">00</div>
+          <div class="stat-label">Final Honesty Check</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="toolkit">
+    <div class="section-header" data-reveal>
+      <div class="section-label">Before You Start</div>
+      <h2 class="section-title">Use the collection like a workflow, not a grab bag.</h2>
+      <p class="section-sub">
+        The prompts are designed to stack. Start with intake, move into analysis, and end with a plain-language truth test. That sequence is what makes the system work.
+      </p>
+    </div>
+
+    <div class="alert-banner alert-banner-danger" data-reveal>
+      <div class="alert-icon">&#9888;</div>
+      <div>
+        <div class="alert-title">Advanced Models Only</div>
+        <div class="alert-text">
+          These prompts are structurally demanding. They rely on multi-step reasoning, careful synthesis, and strict instruction-following. Basic or free-tier models will usually flatten the output and miss the point of the framework.
+        </div>
+        <div class="chip-row">
+          <span class="chip">Claude Opus / Sonnet</span>
+          <span class="chip">GPT-4o / o1</span>
+          <span class="chip">Gemini Pro</span>
+          <span class="chip">Grok</span>
+          <span class="chip">Perplexity Pro</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sequence-grid" style="margin-top:44px;">
+      <div class="sequence-card" data-reveal>
+        <div class="sequence-num">1</div>
+        <div class="sequence-title">Gather your papers.</div>
+        <div class="sequence-text">Upload 5 to 20 PDFs or paste the full text into your model. Tighter topic focus improves every downstream prompt.</div>
+      </div>
+
+      <div class="sequence-card" data-reveal>
+        <div class="sequence-num">2</div>
+        <div class="sequence-title">Always start with Prompt 01.</div>
+        <div class="sequence-text">The Intake Protocol builds the registry, clusters, contradictions, and outliers that every later prompt depends on.</div>
+      </div>
+
+      <div class="sequence-card" data-reveal>
+        <div class="sequence-num">3</div>
+        <div class="sequence-title">Choose by goal.</div>
+        <div class="sequence-text">Need contradictions? Run 02. Need gaps? Run 04. Need a literature review draft? Run 06.</div>
+      </div>
+
+      <div class="sequence-card" data-reveal>
+        <div class="sequence-num">4</div>
+        <div class="sequence-title">End with Prompt 09.</div>
+        <div class="sequence-text">The final step forces plain-language honesty about what the literature actually proves and where uncertainty still dominates.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="prompts">
+    <div class="section-header" data-reveal>
+      <div class="section-label">The Toolkit</div>
+      <h2 class="section-title">All 9 prompts.</h2>
+      <p class="section-sub">
+        Each card opens a full prompt overlay and includes one-click copy. The prompts below retain the original collection content while adopting the visual system and motion language of the rebuilt site.
+      </p>
+    </div>
+
+    <div class="prompt-grid" id="promptsGrid"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="workflow">
+    <div class="section-header" data-reveal>
+      <div class="section-label">Recommended Run Order</div>
+      <h2 class="section-title">Use it like a lab workflow.</h2>
+      <p class="section-sub">
+        Intake first, analysis second, synthesis third, honesty last. If you skip the sequence, you lose a lot of the system's leverage.
+      </p>
+    </div>
+
+    <div class="featured-wrap" data-reveal>
+      <div>
+        <div class="featured-badge">Suggested Order</div>
+        <div class="featured-title">01 -> 02 / 04 / 05 / 06 -> 09</div>
+        <div class="featured-copy">
+          Prompt 01 gives you the map. Prompts 02 through 08 let you interrogate that map from different angles. Prompt 09 is the check against false confidence. That structure is the whole collection philosophy.
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-value">01</div>
+            <div class="metric-label">Intake First</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">04</div>
+            <div class="metric-label">Gap Scanner</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">09</div>
+            <div class="metric-label">Honesty Last</div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Prompt sequence coverage</span>
+            <span id="workflow-fill">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="workflow-progress"></div>
+          </div>
+        </div>
+
+        <div class="featured-actions">
+          <button class="btn btn-primary" type="button" id="copy-synthesis-btn">Copy Prompt 06</button>
+          <a class="btn btn-outline" href="./index.html">Back To Hub</a>
+        </div>
+      </div>
+
+      <div class="featured-visual">
+        <div class="orbit-system">
+          <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+          <div class="orbit orbit-2"><div class="orbit-dot orbit-dot-2"></div></div>
+          <div class="orbit orbit-3"></div>
+          <div class="orbit-center">09</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="cta-inner" data-reveal>
+      <div class="section-label" style="position:relative;margin-bottom:16px;">Collection Footer</div>
+      <h2 class="cta-title">Use them. Improve them.<br><span class="gradient-text">Share them.</span></h2>
+      <p class="cta-sub">
+        Best results come from 5 to 20 papers on a tightly scoped topic. Keep your citations honest. Let the prompts surface uncertainty instead of smoothing it away.
+      </p>
+      <div class="cta-btns">
+        <a class="btn btn-primary btn-lg" href="#prompts">Re-open The Toolkit</a>
+        <a class="btn btn-outline btn-lg" href="./index.html">Back To Hub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-logo">Research Intelligence</div>
+  <ul class="footer-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="./index.html">Hub</a></li>
+  </ul>
+  <div class="footer-copy">Crafted by Ravi Kashyap</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <button class="overlay-close" type="button" id="overlayClose">&times;</button>
+    <div class="overlay-tag" id="overlayTag"></div>
+    <div class="overlay-title" id="overlayTitle"></div>
+    <div class="overlay-desc" id="overlayDesc"></div>
+    <div class="overlay-prompt" id="overlayPrompt"></div>
+    <button class="overlay-copy-btn" id="overlayCopyBtn" type="button">Copy Full Prompt</button>
+  </div>
+</div>
+
+<script src="./theme.js"></script>
+<script>
+const promptsData = [
+  {
+    num: "01",
+    tag: "First Step",
+    title: "The Intake Protocol",
+    desc: "The perfect opening move. Before asking any questions, this prompt builds a structured registry of every paper, groups them into theoretical clusters, flags direct contradictions, and flags methodological outliers in one pass.",
+    howTo: "<strong>Always run this first.</strong> It creates the map every other prompt navigates. Replace [NUMBER] and [TOPIC], paste your papers, and let it build the terrain.",
+    prompt: `I am sharing [NUMBER] papers on [TOPIC]. Before I ask any questions, complete the following four tasks exactly as specified. Do not add commentary, summaries, or filler between tasks.
+
+TASK 1 - PAPER REGISTRY TABLE
+Create a table with these exact columns:
+Author(s) | Year | Title (verbatim) | Core Claim (<=20 words) | Claim Type
+
+For "Claim Type", label each as one of:
+- Explicit thesis (directly stated in abstract or conclusion)
+- Inferred (synthesized from results/discussion - flag with [inferred])
+- Descriptive only (no causal or theoretical claim made)
+
+Do not paraphrase titles. Do not exceed 20 words for core claims.
+
+TASK 2 - THEORETICAL CLUSTERS
+Group the papers into 2-5 clusters based on shared theoretical assumptions, frameworks, or epistemological stance - not shared topic alone. Name each cluster with a noun phrase that captures the intellectual commitment. Write 2-3 sentences explaining what unites papers within the cluster and what distinguishes it from the others.
+
+TASK 3 - DIRECT CONTRADICTIONS
+Identify pairs or groups of papers that make mutually exclusive empirical or theoretical claims about the same phenomenon. List each contradiction as:
+
+Paper A (Author, Year) vs. Paper B (Author, Year)
+Contested claim: [the specific proposition in dispute]
+Nature of contradiction: [factual / causal / definitional / methodological]
+
+Omit cases of different emphasis, scope, or population. Only include genuine logical contradictions.
+
+TASK 4 - METHODOLOGICAL OUTLIERS
+Identify any paper whose methodology is substantially different from the majority. For each outlier: name it, state how it differs, and note whether this difference strengthens or weakens the overall body of evidence.`
+  },
+  {
+    num: "02",
+    tag: "Critical Analysis",
+    title: "The Contradiction Finder",
+    desc: "Surfaces the most significant points where researchers make directly opposing claims. Includes evidence quality ratings for each side and ends with a forced resolution on which position is better supported.",
+    howTo: "<strong>Run after Prompt 01.</strong> Best used on literatures with competing schools of thought. Ask the follow-up question: <strong>Which side should I trust more, and why?</strong>",
+    prompt: `Across all uploaded papers, identify the most significant points where two or more authors make directly contradictory claims about the same phenomenon.
+
+RULES FOR INCLUSION:
+- Include only genuine logical contradictions: claims that cannot both be true simultaneously.
+- Exclude: differences in emphasis, scope limitations, different populations unless authors claim universality, or claims made in different time periods unless authors assert temporal stability.
+
+OUTPUT FORMAT - one row per contradiction:
+| Contested Claim | Position A | Position B | Specific Evidence in Conflict | Root Cause | Evidence Quality |
+
+Column definitions:
+- Contested Claim: The precise proposition in dispute (not the topic).
+- Position A / Position B: Author(s), Year + the exact finding or statement.
+- Specific Evidence in Conflict: What data, result, or logical argument each side uses.
+- Root Cause: methodology / dataset differences / time period / definition of terms / analytical framework / other [specify].
+- Evidence Quality: Strong / Moderate / Weak based on sample size, replication, and methodological rigor.
+
+TARGET: 5-10 contradictions.
+
+SYNTHESIS QUESTION (after the table):
+If you had to resolve the single most consequential contradiction using only the evidence in these papers - which position is better supported, and why? State your reasoning in 3-5 sentences. If the evidence is genuinely insufficient to adjudicate, say so explicitly.`
+  },
+  {
+    num: "03",
+    tag: "Intellectual History",
+    title: "The Citation Chain",
+    desc: "Traces the intellectual life of the three most-cited concepts across your papers: who introduced them, who challenged them, how they were refined, and whether they are settled or still contested.",
+    howTo: "<strong>Use when writing introductions or theoretical frameworks.</strong> The unresolved tension field often points directly at your strongest research contribution.",
+    prompt: `From the uploaded papers, identify the 3 concepts that appear most frequently across multiple papers - referenced by name, defined, debated, or built upon.
+
+For each concept, trace its intellectual history using ONLY evidence from the uploaded papers. Do not draw on outside knowledge. If evidence for a stage is absent, state that explicitly.
+
+CONCEPT TEMPLATE (repeat for each of the 3 concepts):
+
+Concept name: [Name as used in the literature]
+Frequency: [Number of papers that engage with it]
+
+Origin (within this paper set):
+- Who first introduced or defined it?
+- What was the original definition or scope?
+- Source: [Author, Year, direct quote or close paraphrase]
+
+Challenge:
+- Which paper(s) questioned or problematised it, and on what grounds?
+- Was the challenge empirical, theoretical, or definitional?
+- Source: [Author, Year + specific argument]
+- If no challenge exists: state "no explicit challenge identified in this literature"
+
+Refinement:
+- Which paper(s) modified, extended, or operationalised it differently?
+- What specifically changed from the original formulation?
+- Source: [Author, Year + specific modification]
+- If no refinement exists: state "no explicit refinement identified"
+
+Current status: [Settled consensus / Operationally settled but theoretically contested / Actively contested / Emerging]
+
+Conceptual stability score: [1 = highly unstable; 5 = fully settled]
+Justification for score: [2-3 sentences]
+
+Unresolved tension: The single most important question about this concept that these papers raise but do not answer.`
+  },
+  {
+    num: "04",
+    tag: "Research Design",
+    title: "The Gap Scanner",
+    desc: "Finds the five most significant research gaps - acknowledged, implied, and structural. Each gap includes why it exists, which paper came closest, and a concrete path to resolution.",
+    howTo: "<strong>Essential for proposals and dissertations.</strong> Structural gaps are often the most original because they reveal what the field's assumptions prevent anyone from asking.",
+    prompt: `Based only on the uploaded papers, identify the 5 most significant research gaps that this body of literature collectively acknowledges, implies, or structurally forecloses.
+
+DEFINITIONS:
+- Acknowledged gap: Authors explicitly state what their study could not address.
+- Implied gap: The study's design or scope reveals an unanswered question the authors do not name.
+- Structural gap: The field's shared assumptions make certain questions difficult or impossible to ask.
+
+For each gap:
+
+GAP [N]:
+Gap statement: [A specific, falsifiable research question - not a vague theme]
+Gap type: [Acknowledged / Implied / Structural]
+Why it exists: [Primary reason + 2-3 sentence explanation]
+Closest paper: [Which paper came nearest? Where exactly did it fall short?]
+Path to resolution: [Concrete methodology, sample size, timeline - not "more research"]
+Falsifiability test: [Can this be closed by a realistic study? Yes / Possibly / No - explain]
+
+RANKING:
+After listing all 5 gaps, rank them along two dimensions:
+- Theoretical importance: how much would closing this change the field's foundational claims?
+- Practical urgency: how much would closing this change real-world decisions?
+Flag if the two dimensions produce different rankings.`
+  },
+  {
+    num: "05",
+    tag: "Methods Review",
+    title: "The Methodology Audit",
+    desc: "A rigorous cross-paper methods audit with comparability ratings, open-science checks, weakest-methodology assessment, and a verdict on whether synthesis is even valid.",
+    howTo: "<strong>Run before any meta-analysis or synthesis.</strong> The final validity verdict tells you whether combining findings across papers is scientifically defensible.",
+    prompt: `Compare the research methodologies used across all uploaded papers. Complete all four steps.
+
+STEP 1 - CLASSIFICATION TABLE
+Table columns: Paper (Author, Year) | Methodology Type | Data Source | Sample Size | Key Limitation (authors' own) | Comparability Rating
+
+For Comparability Rating: High / Medium / Low with a parenthetical note on the main barrier.
+
+STEP 2 - METHODOLOGY LANDSCAPE
+a) Which methodology type appears most frequently? Propose a hypothesis for why.
+b) Which methodology is conspicuously absent despite being well-suited to the research questions?
+c) Is the overall methodological diversity adequate to triangulate findings, or does it create a systematic blind spot?
+
+STEP 3 - WEAKEST METHODOLOGY ASSESSMENT
+Identify the most methodologically vulnerable paper. Evaluate on:
+- Sample size adequacy
+- Control for confounds
+- Replicability
+- Transparency of reporting
+- Open science: Was the study pre-registered? Is data/code available? Was a power analysis reported?
+State which criterion it fails most clearly and what this means for its conclusions.
+
+STEP 4 - CROSS-PAPER SYNTHESIS VALIDITY
+Given the methodological profile of this literature, is it valid to synthesise findings across these papers? Assess: Yes with caveats / Only partially / No - and explain in 3-5 sentences. Note any specific pairs of papers whose findings should NOT be directly compared.`
+  },
+  {
+    num: "06",
+    tag: "Literature Review",
+    title: "The Master Synthesis",
+    desc: "A field-wide synthesis covering consensus, debates, strongest evidence, the key open question, and what the field cannot yet claim. Every line must stay citation-grounded.",
+    howTo: "<strong>Use as a first draft for a literature review section.</strong> The final section on what the field cannot yet say is what protects you from overclaiming.",
+    prompt: `Using the uploaded papers as your only source, write a synthesis of this body of literature.
+
+STRICT RULES:
+- Every claim must be attributable to at least one uploaded paper. Use inline citations: (Author, Year).
+- Do not introduce knowledge from outside these papers.
+- No hedging language: no "it seems," "some argue," "may suggest," or "appears to."
+- Do not exceed the word budget per section. If evidence is insufficient, write: "Insufficient evidence in this literature to assess."
+
+SECTION 1 - ESTABLISHED CONSENSUS (~100 words)
+What does this field collectively agree on? Only claims supported by 2+ papers. Cite every claim.
+
+SECTION 2 - ACTIVE DEBATES (~100 words)
+For each debate: the specific proposition in dispute, the competing positions, which papers represent each, and which position has stronger evidentiary support (if any).
+
+SECTION 3 - STRONGEST EVIDENCE (~100 words)
+Claims supported by the most consistent, replicated, or methodologically robust evidence. Name the specific methodological features that justify inclusion here.
+
+SECTION 4 - THE KEY OPEN QUESTION (~80 words)
+The single most important unanswered question - phrased as a specific, falsifiable research question.
+
+SECTION 5 - WHAT THIS FIELD CANNOT YET SAY (~60 words)
+2-3 specific claims a reader might want to draw from this literature that the evidence does not yet support.
+
+Total: ~440 words maximum.`
+  },
+  {
+    num: "07",
+    tag: "Critical Theory",
+    title: "The Assumption Killer",
+    desc: "Excavates the 5 to 8 implicit assumptions every paper relies on but never tests. Each assumption is stress-tested with risk level, counterfactual analysis, and testability.",
+    howTo: "<strong>Use when writing critical analysis sections.</strong> High-risk assumptions often become your sharpest critique, especially when the literature hides them in plain sight.",
+    prompt: `From the uploaded papers, identify the 5-8 most consequential assumptions that the majority of these papers share but never explicitly test, justify, or acknowledge.
+
+CRITERIA FOR INCLUSION:
+- Foundational: removing it would require revising core claims.
+- Contestable: plausibly false or context-dependent.
+- Implicit: papers that explicitly acknowledge and justify an assumption are excluded.
+
+For each assumption:
+
+ASSUMPTION [N]:
+Statement: [A declarative claim that could be true or false]
+Shared by: [2-3 papers with a note on where the assumption does the most work]
+Risk level:
+- Low: findings need minor qualification but core conclusions stand.
+- Medium: key findings are invalidated but the research program remains coherent.
+- High: the foundational premise of the research program collapses.
+[Select one and justify - do not inflate to High without justification]
+
+Counterfactual: If this assumption is false, what would the data likely look like - and does any paper in this set contain evidence that could be reinterpreted as a signal against it?
+
+Testability: [Easily testable / Testable but requiring new data / Difficult to test / Untestable - explain]
+
+Consequence: What specifically changes - conclusions, key findings, or the entire research framework?
+
+FINAL RANKING:
+Rank by: Risk Level x Breadth (papers affected) x Testability Urgency.`
+  },
+  {
+    num: "08",
+    tag: "Field Mapping",
+    title: "The Knowledge Map Builder",
+    desc: "Builds a full hierarchy of the field: central claim, supporting pillars, contested zones, frontier questions, a newcomer reading list, and whose work is missing.",
+    howTo: "<strong>Perfect for teaching, slides, or onboarding collaborators.</strong> The final section on whose work is missing is especially useful before peer review.",
+    prompt: `Based only on the uploaded papers, construct a structured knowledge map of this literature. Present as a hierarchical outline. No prose paragraphs except where the template specifies.
+
+1. CENTRAL CLAIM
+The single proposition most of this field's work attempts to support, challenge, or refine. One sentence.
+If no single claim unifies the field, name 2 competing centres and explain the fault line (2-3 sentences).
+
+2. SUPPORTING PILLARS (3-5 entries)
+[Pillar claim - falsifiable proposition]
+Supported by: [Author, Year], [Author, Year]
+Evidence strength: Strong (3+ convergent papers) / Moderate (2 papers or mixed methods) / Provisional (1 paper or weak methods)
+What would falsify this: [One sentence]
+
+3. CONTESTED ZONES (2-3 entries)
+[Contested proposition - the exact claim in dispute, not the topic]
+Position A: [Claim] - [Author, Year]
+Position B: [Claim] - [Author, Year]
+What evidence would resolve this: [1 sentence]
+
+4. FRONTIER QUESTIONS (1-2 entries)
+Specific, falsifiable research questions this literature raises but cannot yet answer.
+
+5. NEWCOMER READING LIST (3 papers)
+[Author, Year] - [Title]
+Why read this first: [1-2 sentences on its foundational role]
+What it cannot tell you: [1 sentence on its key limitation]
+
+WHOSE WORK IS MISSING?
+1-2 theoretical perspectives, disciplinary traditions, or methodological approaches absent from this set that would significantly alter this knowledge map.`
+  },
+  {
+    num: "09",
+    tag: "Final Step",
+    title: "The 'So What' Test",
+    desc: "Three plain-language points for a smart non-expert: what is proven, what remains unknown, and why it matters - followed by a mandatory honesty check against false certainty.",
+    howTo: "<strong>Always run this last.</strong> Use it for abstracts, executive summaries, or public-facing explanation without sacrificing intellectual honesty.",
+    prompt: `Summarise this entire body of research for a thoughtful non-expert who has never read any of it.
+
+FORMAT: Exactly three numbered points. Each 2-3 sentences maximum.
+Audience: Intelligent, no domain knowledge, capable of nuance.
+No jargon. No citations. No passive voice.
+
+POINT 1 - WHAT HAS BEEN PROVEN
+The strongest, most reliable finding. Direct, affirmative claim. No hedging: no "suggests," "may indicate," "appears to," or "is associated with."
+
+After the point, add (outside the 3-sentence limit):
+Confidence source: The finding in [Paper(s)] is the basis for this claim because [specific methodological feature: e.g., replicated in 3 independent samples / pre-registered RCT / only study to control for X].
+
+POINT 2 - WHAT IS STILL UNKNOWN
+The most significant unresolved question - stated with full intellectual honesty, without minimising uncertainty or implying resolution is imminent. If the uncertainty is fundamental rather than just a data gap, say so.
+
+POINT 3 - WHY IT MATTERS
+The single most important consequence. Distinguish between:
+- Immediate application: a decision-maker could act on this today
+- Near-term implication: matters once X is resolved
+- Foundational consequence: what changes in our understanding of the world
+If no direct application exists, state the biggest theoretical consequence.
+
+HONESTY CHECK:
+If the literature is too thin, contradictory, or preliminary to support confident statements in any point - say so. Name which point is weakest and why. Do not manufacture certainty.`
+  }
+];
+
+function updateButtonState(button, idleLabel, successLabel) {
+  button.textContent = successLabel;
+  button.classList.add("copied");
+  window.setTimeout(function () {
+    button.textContent = idleLabel;
+    button.classList.remove("copied");
+  }, 1800);
+}
+
+function buildPromptCards() {
+  const grid = document.getElementById("promptsGrid");
+  promptsData.forEach(function (prompt, index) {
+    const card = document.createElement("div");
+    card.className = "prompt-card";
+    card.setAttribute("data-reveal", "");
+    card.innerHTML = `
+      <div class="prompt-num">${prompt.num}</div>
+      <div class="prompt-tag">${prompt.tag}</div>
+      <div class="prompt-title">${prompt.title}</div>
+      <div class="prompt-desc">${prompt.desc}</div>
+      <div class="prompt-divider"></div>
+      <div class="prompt-how-label">How to use</div>
+      <div class="prompt-how">${prompt.howTo}</div>
+      <button class="copy-btn" type="button" data-index="${index}">Copy Prompt</button>
+    `;
+
+    card.addEventListener("click", function (event) {
+      if (event.target.closest(".copy-btn")) return;
+      openOverlay(index);
+    });
+
+    const copyButton = card.querySelector(".copy-btn");
+    copyButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      NexusTheme.copyText(prompt.prompt).then(function () {
+        updateButtonState(copyButton, "Copy Prompt", "Copied!");
+      });
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function openOverlay(index) {
+  const prompt = promptsData[index];
+  const overlay = document.getElementById("overlay");
+  const copyButton = document.getElementById("overlayCopyBtn");
+
+  document.getElementById("overlayTag").textContent = "Prompt " + prompt.num + " / " + prompt.tag;
+  document.getElementById("overlayTitle").textContent = prompt.title;
+  document.getElementById("overlayDesc").textContent = prompt.desc;
+  document.getElementById("overlayPrompt").textContent = prompt.prompt;
+  copyButton.textContent = "Copy Full Prompt";
+  copyButton.classList.remove("copied");
+  copyButton.dataset.index = String(index);
+
+  overlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeOverlay() {
+  document.getElementById("overlay").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function copyPromptByIndex(index, button, idleLabel, successLabel) {
+  const prompt = promptsData[index];
+  return NexusTheme.copyText(prompt.prompt).then(function () {
+    if (button) updateButtonState(button, idleLabel, successLabel);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  buildPromptCards();
+
+  NexusTheme.setupNav("navbar");
+  NexusTheme.setupScrollProgress("scrollProgress");
+  NexusTheme.setupHeroIntro();
+  NexusTheme.setupReveal();
+  NexusTheme.createHeroScene({ canvasId: "research-hero-canvas", heroSelector: "#hero", widthRatio: 0.58, variant: "research" });
+
+  window.setTimeout(function () {
+    NexusTheme.animateNumber("research-stat-1", 0, 9, 1400, function (value) {
+      return String(value).padStart(2, "0");
+    });
+    NexusTheme.animateNumber("research-stat-2", 0, 20, 1600, function (value) {
+      return String(value).padStart(2, "0");
+    });
+    NexusTheme.animateNumber("research-stat-3", 0, 1, 1200, function (value) {
+      return String(value).padStart(2, "0");
+    });
+  }, 1300);
+
+  window.setTimeout(function () {
+    document.getElementById("workflow-progress").style.width = "100%";
+    NexusTheme.animateNumber("workflow-fill", 0, 100, 1400, function (value) {
+      return value + "%";
+    });
+  }, 900);
+
+  const intakeButton = document.getElementById("copy-intake-btn");
+  intakeButton.addEventListener("click", function () {
+    copyPromptByIndex(0, intakeButton, "Copy Prompt 01", "Copied!");
+  });
+
+  const synthesisButton = document.getElementById("copy-synthesis-btn");
+  synthesisButton.addEventListener("click", function () {
+    copyPromptByIndex(5, synthesisButton, "Copy Prompt 06", "Copied!");
+  });
+
+  const overlay = document.getElementById("overlay");
+  overlay.addEventListener("click", function (event) {
+    if (event.target === overlay) closeOverlay();
+  });
+
+  document.getElementById("overlayClose").addEventListener("click", closeOverlay);
+
+  document.getElementById("overlayCopyBtn").addEventListener("click", function () {
+    const index = Number(this.dataset.index || 0);
+    copyPromptByIndex(index, this, "Copy Full Prompt", "Copied!");
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") closeOverlay();
+  });
+});
+</script>
+</body>
+</html>

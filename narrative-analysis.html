@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narrative Analysis - Ravi Kashyap</title>
+<meta name="description" content="Prompt collection for fiction and narrative analysis: plot logic, character pressure, point of view, scene mechanics, motif tracking, and dialogue subtext.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./theme.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<div class="bg-canvas">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="glow g4"></div>
+  <div class="glow g5"></div>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav id="navbar" class="site-nav">
+  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-orbit logo-orbit-a"></span>
+      <span class="logo-orbit logo-orbit-b"></span>
+      <span class="logo-mark-text">RK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+  </ul>
+  <div class="muted-note" id="collectionMeta"></div>
+  <a class="btn btn-outline nav-cta" href="./index.html">Back To Hub</a>
+</nav>
+
+<main class="page">
+  <section class="hero" id="hero">
+    <canvas id="collection-hero-canvas" class="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span id="collectionBadgeText"></span>
+      </div>
+      <h1 class="hero-title" id="collectionHeroTitle"></h1>
+      <p class="hero-sub" id="collectionSubtitle"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" id="collectionPrimaryCta" href="#prompts"></a>
+        <button class="btn btn-outline btn-lg" id="collectionQuickCopy" type="button"></button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat1">00</div>
+          <div class="stat-label" id="collectionStatLabel1"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat2">00</div>
+          <div class="stat-label" id="collectionStatLabel2"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat3">00</div>
+          <div class="stat-label" id="collectionStatLabel3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="toolkit">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="introLabel"></div>
+      <h2 class="section-title" id="introTitle"></h2>
+      <p class="section-sub" id="introCopy"></p>
+    </div>
+
+    <div class="alert-banner alert-banner-danger" data-reveal>
+      <div class="alert-icon">&#9888;</div>
+      <div>
+        <div class="alert-title" id="warningTitle"></div>
+        <div class="alert-text" id="warningText"></div>
+        <div class="chip-row" id="warningChips"></div>
+      </div>
+    </div>
+
+    <div class="sequence-grid" id="stepsGrid" style="margin-top:44px;"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="prompts">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="promptLabel"></div>
+      <h2 class="section-title" id="promptTitle"></h2>
+      <p class="section-sub" id="promptCopy"></p>
+    </div>
+    <div class="prompt-grid" id="promptsGrid"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="workflow">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="workflowLabel"></div>
+      <h2 class="section-title" id="workflowTitle"></h2>
+      <p class="section-sub" id="workflowCopy"></p>
+    </div>
+
+    <div class="featured-wrap" data-reveal>
+      <div>
+        <div class="featured-badge" id="workflowBadge"></div>
+        <div class="featured-title" id="workflowMainLine"></div>
+        <div class="featured-copy">Start with the story spine, then pressure the character, then zoom into scene mechanics and recurring motifs. Interpretation gets sharper when structure comes first.</div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue1"></div>
+            <div class="metric-label" id="workflowMetricLabel1"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue2"></div>
+            <div class="metric-label" id="workflowMetricLabel2"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue3"></div>
+            <div class="metric-label" id="workflowMetricLabel3"></div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Workflow coverage</span>
+            <span id="workflow-fill">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="workflow-progress"></div>
+          </div>
+        </div>
+
+        <div class="featured-actions">
+          <button class="btn btn-primary" id="workflowCopyBtn" type="button"></button>
+          <a class="btn btn-outline" href="./index.html">Back To Hub</a>
+        </div>
+      </div>
+
+      <div class="featured-visual">
+        <div class="orbit-system">
+          <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+          <div class="orbit orbit-2"><div class="orbit-dot orbit-dot-2"></div></div>
+          <div class="orbit orbit-3"></div>
+          <div class="orbit-center">NA</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="cta-inner" data-reveal>
+      <div class="section-label" style="position:relative;margin-bottom:16px;">Collection Footer</div>
+      <h2 class="cta-title" id="ctaTitle"></h2>
+      <p class="cta-sub" id="ctaSub"></p>
+      <div class="cta-btns">
+        <a class="btn btn-primary btn-lg" id="ctaPrimary" href="#prompts"></a>
+        <a class="btn btn-outline btn-lg" href="./index.html">Back To Hub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-logo">Narrative Analysis</div>
+  <ul class="footer-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="./index.html">Hub</a></li>
+  </ul>
+  <div class="footer-copy">Crafted by Ravi Kashyap</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <button class="overlay-close" type="button" id="overlayClose">&times;</button>
+    <div class="overlay-tag" id="overlayTag"></div>
+    <div class="overlay-title" id="overlayTitle"></div>
+    <div class="overlay-desc" id="overlayDesc"></div>
+    <div class="overlay-prompt" id="overlayPrompt"></div>
+    <button class="overlay-copy-btn" id="overlayCopyBtn" type="button">Copy Full Prompt</button>
+  </div>
+</div>
+
+<script src="./theme.js"></script>
+<script src="./collection-page.js"></script>
+<script>
+window.collectionConfig = {
+  metaTitle: "Narrative Analysis - Ravi Kashyap",
+  pageClass: "page-narrative",
+  sceneVariant: "narrative",
+  navMeta: "Collection 02 / Narrative Analysis",
+  hero: {
+    badge: "Collection 02 / Narrative Analysis",
+    lines: [
+      { text: "Narrative" },
+      { text: "Analysis For" },
+      { text: "Fiction.", gradient: true }
+    ],
+    subtitle: "A prompt collection for reading stories with structural precision: plot logic, character pressure, point of view, scene turns, motifs, and subtext.",
+    primaryCtaLabel: "Explore All 6",
+    quickCopyLabel: "Copy Prompt 01",
+    quickCopyIndex: 0
+  },
+  stats: [
+    { value: 6, label: "Core Prompts" },
+    { value: 5, label: "Craft Lenses" },
+    { value: 1, label: "Revision Map" }
+  ],
+  intro: {
+    label: "Before You Read",
+    title: "Do not jump straight to theme if you have not mapped structure yet.",
+    copy: "Narrative meaning is produced through arrangement, pressure, and point of view. Start with what happens and why, then move toward interpretation."
+  },
+  warning: {
+    title: "Use Complete Scenes Or Full Texts Whenever Possible",
+    text: "Narrative analysis weakens fast when the model only sees fragments. Plot, character revelation, and motif development are all functions of relation, sequence, and omission across the whole work.",
+    chips: ["Plot", "Character", "POV", "Scene turns", "Theme", "Subtext"]
+  },
+  steps: [
+    { title: "Map the spine first.", text: "Identify the causal chain, the complication, the crisis, and the final turn before making any interpretive claim." },
+    { title: "Read the character under pressure.", text: "Look at what the character wants, what blocks them, and how each choice revises our understanding of them." },
+    { title: "Interrogate viewpoint.", text: "Ask who sees, who knows, and what the narration withholds. Point of view determines what kind of truth the story can deliver." },
+    { title: "Finish with motifs and dialogue.", text: "Repeated images and evasive conversation often reveal the emotional argument more clearly than summary." }
+  ],
+  promptSection: {
+    label: "The Toolkit",
+    title: "Six prompts for close narrative reading.",
+    copy: "These prompts work well on short stories, novel chapters, and scene packets. They are built for writers, critics, and serious readers."
+  },
+  workflow: {
+    label: "Suggested Order",
+    title: "Map -> Pressure -> Interpret",
+    copy: "The collection is designed to move from structural reading into interpretive depth without skipping the mechanics that make the meaning possible.",
+    badge: "Recommended Sequence",
+    mainLine: "01 -> 02 -> 04 -> 05",
+    metrics: [
+      { value: "01", label: "Story Spine" },
+      { value: "04", label: "Scene Engine" },
+      { value: "05", label: "Motif Tracker" }
+    ],
+    copyIndex: 3,
+    copyButtonLabel: "Copy Prompt 04"
+  },
+  cta: {
+    title: "Read stories with more<br><span class='gradient-text'>precision.</span>",
+    subtitle: "Interpretation gets stronger when it stays answerable to plot logic, character action, and formal choice.",
+    primaryLabel: "Re-open The Toolkit"
+  },
+  prompts: [
+    {
+      num: "01",
+      tag: "Structure",
+      title: "The Story Spine Mapper",
+      desc: "Breaks a story into causally linked beats: setup, complication, crisis, climax, and resolution, with a focus on why each event matters rather than just what happens.",
+      howTo: "<strong>Use first.</strong> Paste the full story, chapter, or scene sequence. This prompt gives you the causal skeleton every later reading depends on.",
+      prompt: `Read the story below as a structured chain of cause and effect.
+
+TEXT:
+[PASTE STORY / CHAPTER / SCENE SEQUENCE]
+
+Produce the analysis in this format:
+
+1. STORY SITUATION
+- What is the initial condition of the world?
+- What seems stable before the main complication?
+
+2. COMPLICATION
+- What event or pressure disturbs that stability?
+- Why does this matter for the protagonist specifically?
+
+3. ESCALATION CHAIN
+List 5 to 10 major beats in order.
+For each beat:
+- What happens
+- What new pressure or possibility it creates
+- How it causes the next beat
+
+4. CRISIS / DECISION POINT
+- What is the point where something must change?
+- What options are available, and what makes the choice difficult?
+
+5. CLIMAX AND AFTERMATH
+- What is the most heightened moment?
+- What actually changes by the end: situation, self-understanding, relationship, or all three?
+
+6. STORY LOGIC CHECK
+- Which event is the hinge of the whole piece?
+- Which beat would collapse the story if removed?
+- Are there any weak or accidental-looking causal links?`
+    },
+    {
+      num: "02",
+      tag: "Character",
+      title: "The Character Pressure Test",
+      desc: "Analyzes what a character wants, what they fear, how pressure exposes contradiction, and whether the ending changes their self-understanding or only their circumstances.",
+      howTo: "<strong>Use after the story spine.</strong> Character is easiest to misread when you separate interiority from action. This prompt keeps the reading anchored in what the character actually does.",
+      prompt: `Analyze the protagonist under pressure.
+
+TEXT:
+[PASTE STORY / CHAPTER]
+
+OUTPUT FORMAT:
+
+1. SURFACE DESIRE
+- What does the protagonist appear to want?
+- What concrete action are they taking to get it?
+
+2. DEEPER MOTIVE
+- What emotional or existential need seems to sit beneath the surface desire?
+- What in the text supports that inference?
+
+3. CONTRADICTION PROFILE
+- Where do the character's actions conflict with their stated beliefs, self-image, or desires?
+- Are they self-deceived, divided, evasive, or trapped?
+
+4. PRESSURE MOMENTS
+List the 3 to 5 moments where the character is forced to reveal themselves.
+For each moment:
+- What pressure is applied?
+- What choice is made?
+- What new truth about the character becomes visible?
+
+5. CHANGE ASSESSMENT
+- Who is the character at the beginning?
+- Who are they at the end?
+- Has the character changed internally, only externally, both, or neither?
+
+6. FINAL VERDICT
+In 4 to 6 sentences, explain what the story finally understands about this character that it did not understand at the start.`
+    },
+    {
+      num: "03",
+      tag: "Point Of View",
+      title: "The POV and Distance Audit",
+      desc: "Examines who perceives the story, what information is withheld, how narrative distance shifts, and what would change if the same material were told from another angle.",
+      howTo: "<strong>Use when narration feels especially charged or selective.</strong> This is useful for first-person fiction, close third, unreliable narration, and stories built on withheld knowledge.",
+      prompt: `Audit the narrative point of view and distance in the text below.
+
+TEXT:
+[PASTE TEXT]
+
+Analyze using this structure:
+
+1. POV IDENTIFICATION
+- What is the formal point of view? (first person / close third / omniscient / shifting / other)
+- Who functions as the main center of perception?
+
+2. ACCESS TO KNOWLEDGE
+- What can the narrator or focalizing consciousness know directly?
+- What remains hidden, inaccessible, or delayed?
+
+3. NARRATIVE DISTANCE
+- Is the narration intimate, cool, ironic, retrospective, immediate, or unstable?
+- Where does the distance noticeably tighten or widen?
+
+4. REVELATION STRATEGY
+- What does the story deliberately withhold?
+- How does that withholding shape suspense, sympathy, or interpretation?
+
+5. COUNTERFACTUAL TEST
+- What would significantly change if the same material were told from another character's point of view?
+- What thematic or emotional consequences would follow?
+
+6. FINAL READING
+Explain in 4 to 6 sentences why this point-of-view choice is essential to the story rather than interchangeable.`
+    },
+    {
+      num: "04",
+      tag: "Scenes",
+      title: "The Scene Engine Diagnostic",
+      desc: "Reads a scene beat by beat: objective, obstacle, tactic, turn, emotional residue, and what new imbalance the scene leaves behind.",
+      howTo: "<strong>Use on single scenes or short contiguous passages.</strong> Excellent for revision because it tells you whether the scene actually turns or merely conveys information.",
+      prompt: `Analyze the scene below as an engine of pressure and change.
+
+SCENE:
+[PASTE SCENE]
+
+Return the result in this format:
+
+1. SCENE PURPOSE
+- What job is this scene doing in the larger narrative?
+- What changes if the scene is removed?
+
+2. POV OBJECTIVE
+- What does the viewpoint character want in this scene?
+- What tactic do they use to pursue it?
+
+3. OPPOSITION
+- What resists that objective? (another character, social force, memory, shame, contradiction, environment, etc.)
+
+4. BEAT MAP
+Break the scene into 5 to 9 beats.
+For each beat:
+- What changes?
+- What pressure increases or decreases?
+- What new information or emotional shift occurs?
+
+5. TURN
+- Where is the actual turn in the scene?
+- What is different after that moment than before it?
+
+6. EMOTIONAL RESIDUE
+- What does the scene leave unresolved?
+- What new imbalance or anticipation does it create for the next scene?`
+    },
+    {
+      num: "05",
+      tag: "Theme",
+      title: "The Motif and Theme Tracker",
+      desc: "Tracks recurring images, objects, phrases, settings, and gestures, then explains how repetition turns them into thematic pressure rather than decoration.",
+      howTo: "<strong>Use after structural reading.</strong> Theme is strongest when traced through recurrence, contrast, and placement rather than declared as a slogan.",
+      prompt: `Identify the motifs and thematic pressures in the text below.
+
+TEXT:
+[PASTE STORY / CHAPTER]
+
+OUTPUT FORMAT:
+
+1. RECURRING ELEMENTS
+List 4 to 8 recurring motifs. These can be:
+- images
+- objects
+- settings
+- gestures
+- phrases
+- sensory patterns
+
+For each motif:
+- Where it appears
+- What emotional or conceptual pressure it carries
+
+2. PATTERN LOGIC
+- Do the motifs cluster around a single tension or several?
+- Which motifs intensify, mutate, or reverse over the course of the text?
+
+3. THEME FORMULATION
+State the 2 strongest thematic claims the story seems to make.
+For each:
+- What evidence supports it?
+- Which motifs carry most of that weight?
+
+4. RESISTANCE CHECK
+- What part of the story complicates or resists the dominant theme?
+- Where does the text refuse a neat interpretive closure?
+
+5. FINAL READING
+Write a short paragraph explaining how the motifs make the story's thematic argument felt rather than merely stated.`
+    },
+    {
+      num: "06",
+      tag: "Dialogue",
+      title: "The Dialogue and Subtext Analyzer",
+      desc: "Separates what characters say from what they are actually doing in conversation: status moves, evasions, concealed desire, and emotional leakage.",
+      howTo: "<strong>Use on dialogue-heavy scenes.</strong> Best when a conversation feels charged, oblique, or emotionally off-center and you want to know why.",
+      prompt: `Analyze the dialogue below for subtext.
+
+DIALOGUE / SCENE:
+[PASTE TEXT]
+
+Use this structure:
+
+1. SURFACE CONVERSATION
+- What are the characters explicitly talking about?
+
+2. HIDDEN AGENDA
+For each major speaker:
+- What do they actually want from this conversation?
+- What are they unwilling to say directly?
+
+3. STATUS MOVES
+- Where does one character gain or lose control?
+- What lines function as pressure, deflection, seduction, withdrawal, or attack?
+
+4. EVASION MAP
+- Which questions are not really answered?
+- Which statements redirect rather than respond?
+- What does that evasiveness reveal?
+
+5. LEAKAGE
+- Where does feeling escape despite the speaker trying to control it?
+- Through word choice, silence, rhythm, contradiction, or abruptness?
+
+6. FINAL READING
+In 5 to 7 sentences, explain what the conversation is really about beneath its literal topic, and how the text makes that visible without fully stating it.`
+    }
+  ]
+};
+</script>
+</body>
+</html>

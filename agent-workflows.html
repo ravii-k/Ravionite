@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Workflows - Ravi Kashyap</title>
+<meta name="description" content="Prompt collection for building reliable agent workflows: routing, orchestration, tool contracts, evaluation loops, handoffs, and guardrails.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./theme.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<div class="bg-canvas">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="glow g4"></div>
+  <div class="glow g5"></div>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav id="navbar" class="site-nav">
+  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-orbit logo-orbit-a"></span>
+      <span class="logo-orbit logo-orbit-b"></span>
+      <span class="logo-mark-text">RK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+  </ul>
+  <div class="muted-note" id="collectionMeta"></div>
+  <a class="btn btn-outline nav-cta" href="./index.html">Back To Hub</a>
+</nav>
+
+<main class="page">
+  <section class="hero" id="hero">
+    <canvas id="collection-hero-canvas" class="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span id="collectionBadgeText"></span>
+      </div>
+      <h1 class="hero-title" id="collectionHeroTitle"></h1>
+      <p class="hero-sub" id="collectionSubtitle"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" id="collectionPrimaryCta" href="#prompts"></a>
+        <button class="btn btn-outline btn-lg" id="collectionQuickCopy" type="button"></button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat1">00</div>
+          <div class="stat-label" id="collectionStatLabel1"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat2">00</div>
+          <div class="stat-label" id="collectionStatLabel2"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat3">00</div>
+          <div class="stat-label" id="collectionStatLabel3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="toolkit">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="introLabel"></div>
+      <h2 class="section-title" id="introTitle"></h2>
+      <p class="section-sub" id="introCopy"></p>
+    </div>
+
+    <div class="alert-banner alert-banner-danger" data-reveal>
+      <div class="alert-icon">&#9888;</div>
+      <div>
+        <div class="alert-title" id="warningTitle"></div>
+        <div class="alert-text" id="warningText"></div>
+        <div class="chip-row" id="warningChips"></div>
+      </div>
+    </div>
+
+    <div class="sequence-grid" id="stepsGrid" style="margin-top:44px;"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="prompts">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="promptLabel"></div>
+      <h2 class="section-title" id="promptTitle"></h2>
+      <p class="section-sub" id="promptCopy"></p>
+    </div>
+    <div class="prompt-grid" id="promptsGrid"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="workflow">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="workflowLabel"></div>
+      <h2 class="section-title" id="workflowTitle"></h2>
+      <p class="section-sub" id="workflowCopy"></p>
+    </div>
+
+    <div class="featured-wrap" data-reveal>
+      <div>
+        <div class="featured-badge" id="workflowBadge"></div>
+        <div class="featured-title" id="workflowMainLine"></div>
+        <div class="featured-copy">Use the router first, split only when the work is truly decomposable, and never ship without an explicit evaluator and failure audit.</div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue1"></div>
+            <div class="metric-label" id="workflowMetricLabel1"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue2"></div>
+            <div class="metric-label" id="workflowMetricLabel2"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue3"></div>
+            <div class="metric-label" id="workflowMetricLabel3"></div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Workflow coverage</span>
+            <span id="workflow-fill">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="workflow-progress"></div>
+          </div>
+        </div>
+
+        <div class="featured-actions">
+          <button class="btn btn-primary" id="workflowCopyBtn" type="button"></button>
+          <a class="btn btn-outline" href="./index.html">Back To Hub</a>
+        </div>
+      </div>
+
+      <div class="featured-visual">
+        <div class="orbit-system">
+          <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+          <div class="orbit orbit-2"><div class="orbit-dot orbit-dot-2"></div></div>
+          <div class="orbit orbit-3"></div>
+          <div class="orbit-center">AW</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="cta-inner" data-reveal>
+      <div class="section-label" style="position:relative;margin-bottom:16px;">Collection Footer</div>
+      <h2 class="cta-title" id="ctaTitle"></h2>
+      <p class="cta-sub" id="ctaSub"></p>
+      <div class="cta-btns">
+        <a class="btn btn-primary btn-lg" id="ctaPrimary" href="#prompts"></a>
+        <a class="btn btn-outline btn-lg" href="./index.html">Back To Hub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-logo">Agent Workflows</div>
+  <ul class="footer-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="./index.html">Hub</a></li>
+  </ul>
+  <div class="footer-copy">Crafted by Ravi Kashyap</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <button class="overlay-close" type="button" id="overlayClose">&times;</button>
+    <div class="overlay-tag" id="overlayTag"></div>
+    <div class="overlay-title" id="overlayTitle"></div>
+    <div class="overlay-desc" id="overlayDesc"></div>
+    <div class="overlay-prompt" id="overlayPrompt"></div>
+    <button class="overlay-copy-btn" id="overlayCopyBtn" type="button">Copy Full Prompt</button>
+  </div>
+</div>
+
+<script src="./theme.js"></script>
+<script src="./collection-page.js"></script>
+<script>
+window.collectionConfig = {
+  metaTitle: "Agent Workflows - Ravi Kashyap",
+  pageClass: "page-workflow",
+  sceneVariant: "workflow",
+  navMeta: "Collection 01 / Agent Workflows",
+  hero: {
+    badge: "Collection 01 / Agent Workflows",
+    lines: [
+      { text: "Agent Workflows" },
+      { text: "For Reliable" },
+      { text: "LLM Systems.", gradient: true }
+    ],
+    subtitle: "A prompt collection for routing, orchestration, tool contracts, evaluator loops, and clean handoffs. Built for serious agentic systems where legibility matters as much as capability.",
+    primaryCtaLabel: "Explore All 6",
+    quickCopyLabel: "Copy Prompt 01",
+    quickCopyIndex: 0
+  },
+  stats: [
+    { value: 6, label: "Core Prompts" },
+    { value: 3, label: "Workflow Modes" },
+    { value: 1, label: "Eval Loop" }
+  ],
+  intro: {
+    label: "Before You Build",
+    title: "Start simple, then add orchestration only where it pays for itself.",
+    copy: "The most reliable agent systems are usually the ones that know when not to be elaborate. Use these prompts to make decomposition explicit, keep tool contracts tight, and force evaluation back into the loop."
+  },
+  warning: {
+    title: "Do Not Reach For Multi-Agent Structure By Default",
+    text: "Only introduce routing, parallel workers, or evaluator loops when the task genuinely benefits from them. If one model call with a good prompt can do the job, that is usually the better system.",
+    chips: ["Routing", "Parallel workers", "Tool contracts", "Evaluator loops", "Guardrails"]
+  },
+  steps: [
+    { title: "Define the actual end state.", text: "Start from the deliverable, required tools, and pass conditions. Vague goals create noisy agent trees." },
+    { title: "Route before you decompose.", text: "Use a router to classify the task and decide whether the work should stay single-threaded, parallel, or iterative." },
+    { title: "Separate execution from evaluation.", text: "Workers should produce output. Evaluators should score it against explicit criteria and request revisions when needed." },
+    { title: "Leave a clean handoff.", text: "Every run should end with a state summary, unresolved questions, and next actions a human or another agent can pick up." }
+  ],
+  promptSection: {
+    label: "The Toolkit",
+    title: "Six prompts for real agent workflows.",
+    copy: "These are structured for clarity, decomposition, and reliability. They are especially useful when you are moving from single prompts to multi-step systems."
+  },
+  workflow: {
+    label: "Suggested Order",
+    title: "Route -> Execute -> Evaluate",
+    copy: "The prompts are arranged to help you move from task classification to orchestration, then from draft production to quality control and handoff.",
+    badge: "Recommended Sequence",
+    mainLine: "01 -> 03 -> 04 -> 06",
+    metrics: [
+      { value: "01", label: "Router" },
+      { value: "03", label: "Worker Split" },
+      { value: "06", label: "Guardrail Audit" }
+    ],
+    copyIndex: 2,
+    copyButtonLabel: "Copy Prompt 03"
+  },
+  cta: {
+    title: "Build agents that stay<br><span class='gradient-text'>legible.</span>",
+    subtitle: "The point is not complexity. The point is reliable structure, measurable output quality, and systems that can survive revision.",
+    primaryLabel: "Re-open The Toolkit"
+  },
+  prompts: [
+    {
+      num: "01",
+      tag: "Routing",
+      title: "The Router Blueprint",
+      desc: "Classifies an incoming request, decides whether it should stay single-pass or become a multi-step workflow, and defines the exact decomposition only if needed.",
+      howTo: "<strong>Use first.</strong> Paste the raw user request, available tools, and any constraints. This prompt decides whether orchestration is justified at all.",
+      prompt: `You are a workflow router for an LLM system. Your job is to decide whether the request below should be handled as:
+
+1. Single response
+2. Sequential multi-step workflow
+3. Parallel worker workflow
+4. Evaluator-optimizer loop
+5. Human-in-the-loop workflow
+
+INPUTS:
+- User request: [PASTE REQUEST]
+- Available tools: [LIST TOOLS]
+- Constraints: [TIME / COST / RISK / PRIVACY / LATENCY]
+
+OUTPUT FORMAT:
+
+TASK CLASSIFICATION
+- Recommended workflow type: [one of the 5]
+- Why this is the simplest sufficient architecture: [3-5 sentences]
+
+ROUTING DECISION
+- What makes a single response sufficient or insufficient?
+- If decomposition is needed, what specific sub-problems justify it?
+- Which parts are independent enough for parallelization, and which are not?
+
+EXECUTION PLAN
+- Step 1:
+- Step 2:
+- Step 3:
+[Use only the steps actually needed]
+
+TOOLS AND STATE
+- Tool(s) required at each step
+- Information that must persist between steps
+- Failure points that could break the workflow
+
+STOP CONDITIONS
+- What does success look like?
+- What evidence would show this workflow is overbuilt?
+- If the request should stay single-pass, say so clearly and explain why.`
+    },
+    {
+      num: "02",
+      tag: "Tool Design",
+      title: "The Tool Contract Builder",
+      desc: "Turns a vague tool idea into a precise contract: inputs, outputs, preconditions, failure states, retry policy, and when the agent should not call it.",
+      howTo: "<strong>Use before shipping tools into an agent loop.</strong> Poor tool contracts cause confused calls, invalid inputs, and fake confidence about what the system can do.",
+      prompt: `I am designing a tool for an LLM agent. Build a precise contract for it.
+
+TOOL NAME:
+[NAME]
+
+TOOL PURPOSE:
+[WHAT THE TOOL IS SUPPOSED TO DO]
+
+CURRENT TOOL IDEA:
+[OPTIONAL RAW DESCRIPTION OR SCHEMA]
+
+Generate the following:
+
+1. TOOL CONTRACT
+- Name
+- One-sentence purpose
+- Exact inputs required
+- Output format
+- Preconditions for valid use
+- Conditions under which the tool must NOT be called
+
+2. FAILURE MODEL
+- Likely failure modes
+- How the agent should detect each failure
+- Retry policy: retry / reformulate inputs / escalate / stop
+- User-visible fallback when the tool fails
+
+3. CALLING POLICY
+- What information the agent must gather before calling the tool
+- What ambiguity must be resolved first
+- What signals indicate another tool or direct reasoning would be better
+
+4. OBSERVABILITY
+- What logs or traces should be recorded for each call?
+- Which metrics matter most for reliability?
+
+5. FINAL OUTPUT
+Summarize the tool contract as a compact spec that an engineer could implement and an agent could follow without guessing.`
+    },
+    {
+      num: "03",
+      tag: "Orchestration",
+      title: "The Orchestrator / Worker Split",
+      desc: "Designs a parallel worker plan with scopes, dependencies, handoff format, aggregation rules, and anti-duplication checks before anything runs.",
+      howTo: "<strong>Use when a task can be partitioned.</strong> This is best for research, audits, synthesis, or any job where multiple workers can independently gather or draft material.",
+      prompt: `Design an orchestrator / worker workflow for the task below.
+
+TASK:
+[PASTE TASK]
+
+GOAL:
+Break the work into parallel or semi-parallel worker units without duplication, then define how the orchestrator should merge the outputs.
+
+OUTPUT FORMAT:
+
+ORCHESTRATOR PLAN
+- Global objective
+- Final deliverable format
+- Non-negotiable evaluation criteria
+
+WORKER MAP
+For each worker:
+- Worker name
+- Exact scope of responsibility
+- Inputs it receives
+- What it must produce
+- What it must explicitly avoid duplicating
+
+DEPENDENCIES
+- Which workers can run in parallel?
+- Which worker outputs are prerequisites for later steps?
+- Where should the orchestrator pause and inspect before continuing?
+
+MERGE PROTOCOL
+- How should outputs be combined?
+- What fields should every worker return so outputs are mergeable?
+- How should conflicts between workers be resolved?
+
+QUALITY RISKS
+- Where is duplication most likely?
+- Where is inconsistency most likely?
+- What should the orchestrator verify before presenting the final result?
+
+Keep the plan specific enough that each worker could be prompted independently without ambiguity.`
+    },
+    {
+      num: "04",
+      tag: "Evaluation",
+      title: "The Evaluator-Optimizer Loop",
+      desc: "Creates a strict critique-and-rewrite loop with pass/fail criteria, defect taxonomy, revision instructions, and a stopping rule to avoid endless iteration.",
+      howTo: "<strong>Use when quality matters more than speed.</strong> Especially useful for agent-written drafts, plans, code reviews, or any high-stakes structured output.",
+      prompt: `I need an evaluator-optimizer loop for the output below.
+
+TASK OBJECTIVE:
+[DESCRIBE THE ORIGINAL TASK]
+
+CURRENT OUTPUT:
+[PASTE OUTPUT]
+
+QUALITY BAR:
+[DESCRIBE WHAT "GOOD" MUST LOOK LIKE]
+
+Build the following:
+
+1. EVALUATION RUBRIC
+- 4 to 7 criteria
+- For each criterion: what passing looks like, what failure looks like
+
+2. DEFECT REVIEW
+Review the current output and classify defects into:
+- Missing requirement
+- Incorrect reasoning
+- Weak evidence or support
+- Structural confusion
+- Redundancy
+- Tone / audience mismatch
+- Other [specify]
+
+3. REVISION DIRECTIVE
+Write a revision prompt that tells an optimizer exactly what to fix, in what order, and what to preserve.
+
+4. STOP RULE
+Define when the loop should stop:
+- Pass threshold
+- Maximum number of revision cycles
+- Conditions requiring human review instead of another iteration
+
+5. FINAL VERDICT
+State whether the current output should:
+- Ship as-is
+- Revise once
+- Enter a full evaluator-optimizer loop
+- Escalate to human review`
+    },
+    {
+      num: "05",
+      tag: "Handoff",
+      title: "The Handoff State Pack",
+      desc: "Packages a live run so another agent or a human can continue without rereading the entire trace. Includes state, decisions, open risks, and next actions.",
+      howTo: "<strong>Use when context must survive a model switch, agent handoff, or human review.</strong> This is the prompt that turns a messy run into a portable working state.",
+      prompt: `Compress the current workflow state into a clean handoff pack.
+
+SOURCE MATERIAL:
+[PASTE TRANSCRIPT / TRACE / NOTES / INTERMEDIATE OUTPUT]
+
+Produce the handoff in this exact structure:
+
+MISSION
+- What problem is being solved?
+- What final deliverable is expected?
+
+CURRENT STATE
+- What has already been completed?
+- What intermediate outputs exist?
+- What assumptions are currently being used?
+
+KEY DECISIONS
+- Decision
+- Why it was made
+- What trade-off it created
+
+OPEN QUESTIONS
+- What remains unresolved?
+- What evidence or action would resolve each question?
+
+RISK REGISTER
+- Highest current risk
+- Likely consequence
+- Suggested mitigation
+
+NEXT ACTION
+- The single best next step
+- Who should take it: current agent / new agent / human reviewer
+
+The handoff should be concise enough to read quickly but detailed enough that work can resume without reconstructing the whole run.`
+    },
+    {
+      num: "06",
+      tag: "Reliability",
+      title: "The Guardrail Audit",
+      desc: "Stress-tests an agent workflow for hallucination risk, loop failure, tool misuse, state corruption, over-delegation, and unsafe stopping behavior.",
+      howTo: "<strong>Use last, before deployment.</strong> If you cannot explain how the system fails, you do not yet understand the system you built.",
+      prompt: `Audit the workflow below for reliability and safety.
+
+WORKFLOW:
+[PASTE WORKFLOW DESCRIPTION OR PROMPT CHAIN]
+
+AVAILABLE TOOLS:
+[LIST TOOLS]
+
+Evaluate the workflow across the following dimensions:
+
+1. HALLUCINATION RISK
+- Where is the model likely to invent missing facts, state, or tool outcomes?
+
+2. TOOL MISUSE RISK
+- Where might the agent call a tool with incomplete or invalid inputs?
+
+3. LOOP RISK
+- Where could the workflow retry, revise, or delegate indefinitely?
+
+4. STATE RISK
+- What information might be dropped, duplicated, or mutated incorrectly between steps?
+
+5. OVER-ORCHESTRATION RISK
+- Which parts of the workflow are more complex than the task requires?
+
+6. HUMAN ESCALATION
+- Where should the workflow stop and ask for human judgment rather than continue autonomously?
+
+FINAL OUTPUT:
+- Top 5 failure modes ranked by severity
+- One mitigation for each
+- A simpler version of the workflow if the current design is overbuilt
+- A ship / revise / redesign verdict with reasons`
+    }
+  ]
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Systems - Ravi Kashyap</title>
+<meta name="description" content="Prompt collection for memory systems in AI workflows: short-term state, semantic profiles, episodic memory, procedural memory, update policies, and audits.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./theme.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<div class="bg-canvas">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="glow g4"></div>
+  <div class="glow g5"></div>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav id="navbar" class="site-nav">
+  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-orbit logo-orbit-a"></span>
+      <span class="logo-orbit logo-orbit-b"></span>
+      <span class="logo-mark-text">RK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+  </ul>
+  <div class="muted-note" id="collectionMeta"></div>
+  <a class="btn btn-outline nav-cta" href="./index.html">Back To Hub</a>
+</nav>
+
+<main class="page">
+  <section class="hero" id="hero">
+    <canvas id="collection-hero-canvas" class="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span id="collectionBadgeText"></span>
+      </div>
+      <h1 class="hero-title" id="collectionHeroTitle"></h1>
+      <p class="hero-sub" id="collectionSubtitle"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" id="collectionPrimaryCta" href="#prompts"></a>
+        <button class="btn btn-outline btn-lg" id="collectionQuickCopy" type="button"></button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat1">00</div>
+          <div class="stat-label" id="collectionStatLabel1"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat2">00</div>
+          <div class="stat-label" id="collectionStatLabel2"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat3">00</div>
+          <div class="stat-label" id="collectionStatLabel3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="toolkit">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="introLabel"></div>
+      <h2 class="section-title" id="introTitle"></h2>
+      <p class="section-sub" id="introCopy"></p>
+    </div>
+
+    <div class="alert-banner alert-banner-danger" data-reveal>
+      <div class="alert-icon">&#9888;</div>
+      <div>
+        <div class="alert-title" id="warningTitle"></div>
+        <div class="alert-text" id="warningText"></div>
+        <div class="chip-row" id="warningChips"></div>
+      </div>
+    </div>
+
+    <div class="sequence-grid" id="stepsGrid" style="margin-top:44px;"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="prompts">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="promptLabel"></div>
+      <h2 class="section-title" id="promptTitle"></h2>
+      <p class="section-sub" id="promptCopy"></p>
+    </div>
+    <div class="prompt-grid" id="promptsGrid"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="workflow">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="workflowLabel"></div>
+      <h2 class="section-title" id="workflowTitle"></h2>
+      <p class="section-sub" id="workflowCopy"></p>
+    </div>
+
+    <div class="featured-wrap" data-reveal>
+      <div>
+        <div class="featured-badge" id="workflowBadge"></div>
+        <div class="featured-title" id="workflowMainLine"></div>
+        <div class="featured-copy">A good memory system does not keep everything. It stores the right kind of information in the right form, updates it at the right time, and audits it before it turns into drift.</div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue1"></div>
+            <div class="metric-label" id="workflowMetricLabel1"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue2"></div>
+            <div class="metric-label" id="workflowMetricLabel2"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue3"></div>
+            <div class="metric-label" id="workflowMetricLabel3"></div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Workflow coverage</span>
+            <span id="workflow-fill">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="workflow-progress"></div>
+          </div>
+        </div>
+
+        <div class="featured-actions">
+          <button class="btn btn-primary" id="workflowCopyBtn" type="button"></button>
+          <a class="btn btn-outline" href="./index.html">Back To Hub</a>
+        </div>
+      </div>
+
+      <div class="featured-visual">
+        <div class="orbit-system">
+          <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+          <div class="orbit orbit-2"><div class="orbit-dot orbit-dot-2"></div></div>
+          <div class="orbit orbit-3"></div>
+          <div class="orbit-center">MS</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="cta-inner" data-reveal>
+      <div class="section-label" style="position:relative;margin-bottom:16px;">Collection Footer</div>
+      <h2 class="cta-title" id="ctaTitle"></h2>
+      <p class="cta-sub" id="ctaSub"></p>
+      <div class="cta-btns">
+        <a class="btn btn-primary btn-lg" id="ctaPrimary" href="#prompts"></a>
+        <a class="btn btn-outline btn-lg" href="./index.html">Back To Hub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-logo">Memory Systems</div>
+  <ul class="footer-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="./index.html">Hub</a></li>
+  </ul>
+  <div class="footer-copy">Crafted by Ravi Kashyap</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <button class="overlay-close" type="button" id="overlayClose">&times;</button>
+    <div class="overlay-tag" id="overlayTag"></div>
+    <div class="overlay-title" id="overlayTitle"></div>
+    <div class="overlay-desc" id="overlayDesc"></div>
+    <div class="overlay-prompt" id="overlayPrompt"></div>
+    <button class="overlay-copy-btn" id="overlayCopyBtn" type="button">Copy Full Prompt</button>
+  </div>
+</div>
+
+<script src="./theme.js"></script>
+<script src="./collection-page.js"></script>
+<script>
+window.collectionConfig = {
+  metaTitle: "Memory Systems - Ravi Kashyap",
+  pageClass: "page-memory",
+  sceneVariant: "memory",
+  navMeta: "Collection 02 / Memory Systems",
+  hero: {
+    badge: "Collection 02 / Memory Systems",
+    lines: [
+      { text: "Memory Systems" },
+      { text: "For Stateful" },
+      { text: "AI Work.", gradient: true }
+    ],
+    subtitle: "A prompt collection for designing what an AI system should remember, when it should update memory, how memory should be typed, and how to prevent drift.",
+    primaryCtaLabel: "Explore All 6",
+    quickCopyLabel: "Copy Prompt 01",
+    quickCopyIndex: 0
+  },
+  stats: [
+    { value: 6, label: "Core Prompts" },
+    { value: 4, label: "Memory Types" },
+    { value: 1, label: "Audit Loop" }
+  ],
+  intro: {
+    label: "Before You Store",
+    title: "Memory is a system design problem, not just a longer context window.",
+    copy: "The useful question is never should this be remembered in the abstract. The useful question is what kind of memory this is, when it should be updated, and whether it helps future work more than it harms it."
+  },
+  warning: {
+    title: "Do Not Save Everything",
+    text: "Good memory systems filter aggressively. Stale, low-signal, conflicting, or privacy-sensitive memory is often worse than forgetting. Store only what improves future reasoning or execution.",
+    chips: ["Short-term", "Semantic", "Episodic", "Procedural", "Hot path", "Background"]
+  },
+  steps: [
+    { title: "Classify before you store.", text: "First decide whether the information belongs in short-term state, semantic profile, episodic log, or procedural playbook." },
+    { title: "Separate stable from situational.", text: "User preferences and standing constraints belong in a different memory layer than one-off events or temporary task state." },
+    { title: "Choose update timing intentionally.", text: "Some memories must update in the hot path. Others should only be distilled in the background after the task ends." },
+    { title: "Audit memory routinely.", text: "Every memory layer needs conflict checks, stale-data detection, and deletion criteria." }
+  ],
+  promptSection: {
+    label: "The Toolkit",
+    title: "Six prompts for building memory that actually helps.",
+    copy: "These prompts work for agent systems, long-running assistants, and any workflow where the model has to carry useful state across sessions without becoming confused."
+  },
+  workflow: {
+    label: "Suggested Order",
+    title: "Classify -> Distill -> Audit",
+    copy: "Start by sorting memory types correctly, then turn raw traces into structured memory, and finish with an audit before you trust what has been stored.",
+    badge: "Recommended Sequence",
+    mainLine: "01 -> 02 / 03 / 04 -> 06",
+    metrics: [
+      { value: "01", label: "Classifier" },
+      { value: "04", label: "Playbook" },
+      { value: "06", label: "Audit" }
+    ],
+    copyIndex: 5,
+    copyButtonLabel: "Copy Prompt 06"
+  },
+  cta: {
+    title: "Store less, remember<br><span class='gradient-text'>better.</span>",
+    subtitle: "The goal is not maximum retention. The goal is future usefulness with minimal drift, confusion, and privacy risk.",
+    primaryLabel: "Re-open The Toolkit"
+  },
+  prompts: [
+    {
+      num: "01",
+      tag: "Classification",
+      title: "The Memory Inventory Architect",
+      desc: "Sorts raw information into short-term state, semantic memory, episodic memory, or procedural memory, and explains why each item belongs where it does.",
+      howTo: "<strong>Use first.</strong> Paste conversation logs, notes, or workflow traces. This prompt creates the memory map before anything is actually stored.",
+      prompt: `You are designing a memory system for an AI workflow. Classify the information below into the correct memory type.
+
+SOURCE MATERIAL:
+[PASTE CONVERSATION HISTORY / NOTES / TASK TRACE]
+
+Use these categories:
+- Short-term state: needed for the current task or session only
+- Semantic memory: stable facts, preferences, identity details, standing constraints
+- Episodic memory: specific past events, outcomes, failures, or notable interactions
+- Procedural memory: reusable know-how, routines, or successful operating instructions
+
+OUTPUT FORMAT:
+
+1. MEMORY TABLE
+For each memory candidate:
+- Memory item
+- Recommended memory type
+- Why this type is correct
+- Should it be stored, delayed, or discarded?
+
+2. STORAGE POLICY
+- Which items belong only in the current context window?
+- Which items should persist across sessions?
+- Which items are too low-signal or too risky to keep?
+
+3. RISK CHECK
+- Which items might become stale quickly?
+- Which items could be misread if detached from their original context?
+- Which items may require explicit consent or privacy review before storage?`
+    },
+    {
+      num: "02",
+      tag: "Semantic",
+      title: "The Profile Extractor",
+      desc: "Distills stable user or system facts into a semantic profile with confidence, evidence, and explicit uncertainty instead of mixing hard facts with guesses.",
+      howTo: "<strong>Use for stable facts only.</strong> This is for preferences, recurring constraints, long-term goals, and identity-level details that genuinely help future sessions.",
+      prompt: `Extract semantic memory from the material below.
+
+SOURCE MATERIAL:
+[PASTE CHATS / NOTES / PROFILE INFORMATION]
+
+Build a semantic profile with this structure:
+
+1. STABLE FACTS
+For each fact:
+- Fact statement
+- Evidence from the source material
+- Confidence: high / medium / low
+
+2. PREFERENCES
+For each preference:
+- Preference statement
+- Context in which it applies
+- Evidence
+- Whether it seems strong, weak, or provisional
+
+3. STANDING CONSTRAINTS
+- Recurrent rules, boundaries, requirements, or dislikes
+- Evidence and confidence for each
+
+4. LONG-TERM GOALS
+- What durable goals or directions are visible?
+- What evidence supports each?
+
+5. EXCLUSIONS
+List details that should NOT enter semantic memory because they are temporary, speculative, emotionally reactive, or insufficiently evidenced.
+
+Do not infer stable memory from a single weak signal unless you flag it explicitly as tentative.`
+    },
+    {
+      num: "03",
+      tag: "Episodic",
+      title: "The Episode Distiller",
+      desc: "Turns a completed run into episodic memory: what happened, what decision mattered, what went wrong or right, and what future trigger should reactivate the memory.",
+      howTo: "<strong>Use after a meaningful session.</strong> Best for successes, failures, pivots, mistakes, and moments that future sessions should be able to recall as prior experience.",
+      prompt: `Convert the source material below into episodic memory entries.
+
+SOURCE MATERIAL:
+[PASTE TASK TRACE / CONVERSATION / WORK SESSION]
+
+For each meaningful episode, produce:
+
+EPISODE [N]
+- Situation: What was happening?
+- Goal: What was being attempted?
+- Key decision: What choice or turning point mattered most?
+- Outcome: What happened?
+- Lesson: What should be remembered from this event?
+- Reuse trigger: In what future situation should this memory be retrieved?
+- Confidence: high / medium / low
+
+Then add:
+
+EPISODE FILTER
+- Which events are too trivial to store?
+- Which events are emotionally intense but operationally low-value?
+- Which events are likely to mislead if remembered without broader context?`
+    },
+    {
+      num: "04",
+      tag: "Procedural",
+      title: "The Playbook Compiler",
+      desc: "Extracts reusable procedures from repeated success patterns and rewrites them into stable, stepwise procedural memory with stop conditions and failure checks.",
+      howTo: "<strong>Use when a workflow has worked more than once.</strong> This is not for one-off inspiration. It is for turning repeated success into a reusable operating routine.",
+      prompt: `Turn the material below into procedural memory.
+
+SOURCE MATERIAL:
+[PASTE MULTIPLE SUCCESSFUL RUNS / NOTES / SOP DRAFTS]
+
+Build a procedural playbook in this format:
+
+1. PROCEDURE NAME
+- Short title
+
+2. WHEN TO USE IT
+- Trigger conditions
+- Situations where it is a good fit
+- Situations where it is not
+
+3. STEPWISE PROCEDURE
+- Step 1
+- Step 2
+- Step 3
+[Continue only as needed]
+
+4. DECISION POINTS
+- Where does judgment matter?
+- What signals determine which branch to take?
+
+5. FAILURE CHECKS
+- Common failure modes
+- What to verify before moving on
+- When to stop and escalate
+
+6. PROCEDURAL MEMORY TEST
+- What evidence suggests this is stable enough to store as a reusable routine?
+- What remains too context-specific and should stay out of procedural memory?`
+    },
+    {
+      num: "05",
+      tag: "Update Policy",
+      title: "The Hot Path / Background Split",
+      desc: "Decides which memory updates must happen during the live task and which should be delayed into background distillation, with explicit trade-offs for latency and safety.",
+      howTo: "<strong>Use when the system is gaining memory over time.</strong> This prompt is especially useful for deciding whether a memory write should happen immediately or after review.",
+      prompt: `Design a memory update policy for the system below.
+
+SYSTEM CONTEXT:
+[DESCRIBE AGENT / ASSISTANT / WORKFLOW]
+
+CURRENT MEMORY CANDIDATES:
+[PASTE CANDIDATE MEMORIES OR SAMPLE EVENTS]
+
+Decide which updates should happen:
+- In the hot path (during the current interaction)
+- In the background (after the interaction ends)
+- Not at all
+
+OUTPUT FORMAT:
+
+1. HOT PATH UPDATES
+- What must be updated immediately?
+- Why does delaying it hurt performance or correctness?
+
+2. BACKGROUND UPDATES
+- What should be distilled later?
+- What review or aggregation is needed before storage?
+
+3. NO-STORE ITEMS
+- Which items should never be written into memory?
+- Why are they too noisy, risky, or temporary?
+
+4. TRADE-OFFS
+- Latency risk
+- Drift risk
+- Privacy or sensitivity risk
+- Retrieval value
+
+5. FINAL POLICY
+Write a compact memory-write policy that an engineer could implement without guessing.`
+    },
+    {
+      num: "06",
+      tag: "Audit",
+      title: "The Memory Audit and Conflict Resolver",
+      desc: "Inspects an existing memory store for stale entries, contradictions, weak evidence, low retrieval value, and privacy risk, then recommends merge, keep, rewrite, or delete actions.",
+      howTo: "<strong>Use regularly.</strong> Memory without hygiene turns into drift. This prompt is for maintenance, conflict resolution, and trust calibration.",
+      prompt: `Audit the memory store below.
+
+MEMORY STORE:
+[PASTE CURRENT MEMORY ITEMS]
+
+Evaluate each item across these dimensions:
+- Accuracy risk
+- Staleness risk
+- Conflict with other stored memories
+- Retrieval value
+- Privacy / sensitivity risk
+
+OUTPUT FORMAT:
+
+MEMORY REVIEW TABLE
+For each memory item:
+- Item
+- Memory type
+- Risk summary
+- Recommended action: keep / rewrite / merge / archive / delete
+- Why
+
+CONFLICT REPORT
+- Which memories contradict each other?
+- Which contradictions are resolvable?
+- Which require human review?
+
+STORE HEALTH SUMMARY
+- What percentage of the store looks healthy?
+- What patterns of drift or over-storage are visible?
+- What deletion or rewrite policy would improve the store most?
+
+FINAL VERDICT
+State whether this memory system is:
+- Healthy
+- Usable but drifting
+- Overstored
+- Unsafe to trust without cleanup`
+    }
+  ]
+};
+</script>
+</body>
+</html>

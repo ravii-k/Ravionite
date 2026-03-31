@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ravi Kashyap</title>
+<meta name="description" content="Software engineer, writer, and builder creating at the intersection of code, literature, and AI systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./theme.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<div class="bg-canvas">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="glow g4"></div>
+  <div class="glow g5"></div>
+</div>
+
+<nav id="navbar" class="site-nav">
+  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-orbit logo-orbit-a"></span>
+      <span class="logo-orbit logo-orbit-b"></span>
+      <span class="logo-mark-text">RK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#notes">Notes</a></li>
+    <li><a href="#book">Book</a></li>
+  </ul>
+  <a class="btn btn-primary nav-cta" href="#collections">Explore Collections</a>
+</nav>
+
+<main class="page">
+  <section class="hero hero-home" id="hero">
+    <canvas id="home-hero-canvas" class="hero-canvas"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        Prompt engineer + builder
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-line"><span class="hero-line-inner">Systems For</span></span>
+        <span class="hero-line"><span class="hero-line-inner">Language, Code,</span></span>
+        <span class="hero-line"><span class="hero-line-inner"><span class="gradient-text">And Thought.</span></span></span>
+      </h1>
+
+      <p class="hero-sub">
+        I build software, work as a prompt engineer, write literary fiction, and design tools that help people think more clearly with machines. This site is the personal launchpad for that work: prompt systems, open-source experiments, field notes, and a novel in progress.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="./agent-workflows.html">Open Agent Workflows</a>
+        <a class="btn btn-outline btn-lg" href="#book">See The Novel</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="site-stat-1">00</div>
+          <div class="stat-label">Prompt Collections</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="site-stat-2">00</div>
+          <div class="stat-label">GitHub Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="site-stat-3">00</div>
+          <div class="stat-label">Novel Chapters</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-section">
+    <div class="marquee-header">
+      <div class="section-label">Operating Areas</div>
+    </div>
+    <div class="marquee-wrap">
+      <div class="marquee-track" id="home-marquee"></div>
+    </div>
+  </div>
+
+  <section class="section" id="collections">
+    <div class="section-header" data-reveal>
+      <div class="section-label">Prompt Collections</div>
+      <h2 class="section-title">A personal launchpad for focused intellectual tools.</h2>
+      <p class="section-sub">
+        Each collection is designed like a product system rather than a prompt dump. The goal is sharper reasoning, cleaner outputs, and a workflow that actually holds up under serious use.
+      </p>
+    </div>
+
+    <div class="glass-grid collections-grid">
+      <a class="glass-card" href="./agent-workflows.html" data-reveal>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(47,255,150,0.12),rgba(47,200,255,0.15));border:1px solid rgba(47,255,150,0.2)">01</div>
+        <div class="card-kicker">Open Collection</div>
+        <div class="card-title">Agent Workflows</div>
+        <div class="card-desc">Prompt systems for routing, tool contracts, worker orchestration, evaluator loops, handoffs, and deployment guardrails.</div>
+        <div class="card-meta">Agents / orchestration / reliability / evaluation</div>
+        <div class="card-link">Open collection <span>&rarr;</span></div>
+      </a>
+
+      <a class="glass-card" href="./memory-systems.html" data-reveal>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(255,210,47,0.12),rgba(255,140,47,0.15));border:1px solid rgba(255,210,47,0.2)">02</div>
+        <div class="card-kicker">Open Collection</div>
+        <div class="card-title">Memory Systems</div>
+        <div class="card-desc">Prompt frameworks for short-term state, semantic profile, episodic memory, procedural playbooks, update policies, and memory audits.</div>
+        <div class="card-meta">AI memory / state / retention / cleanup</div>
+        <div class="card-link">Open collection <span>&rarr;</span></div>
+      </a>
+
+      <a class="glass-card" href="./research-intelligence.html" data-reveal>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(123,47,255,0.2),rgba(47,111,255,0.2));border:1px solid rgba(123,47,255,0.25)">03</div>
+        <div class="card-kicker">Live Collection</div>
+        <div class="card-title">Research Intelligence</div>
+        <div class="card-desc">Nine professional-grade prompts for literature analysis, contradiction mapping, methodology review, gap finding, and synthesis.</div>
+        <div class="card-meta">9 prompts / citation-grounded / research workflow</div>
+        <div class="card-link">Open collection <span>&rarr;</span></div>
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="projects">
+    <div class="section-header" data-reveal>
+      <div class="section-label">Open Source</div>
+      <h2 class="section-title">Projects in active orbit.</h2>
+      <p class="section-sub">
+        I tend to build where curiosity and repeated use overlap. Most of the work starts as a personal need, then becomes a system worth sharing.
+      </p>
+    </div>
+
+    <div class="dual-grid">
+      <a class="detail-card" href="https://github.com/ravii-k/memoryweave" target="_blank" rel="noopener" data-reveal>
+        <div class="detail-head">
+          <div>
+            <div class="card-kicker">Context Infrastructure</div>
+            <div class="detail-title">memoryweave</div>
+          </div>
+          <div class="card-icon" style="background:linear-gradient(135deg,rgba(123,47,255,0.2),rgba(47,111,255,0.2));border:1px solid rgba(123,47,255,0.25)">MW</div>
+        </div>
+        <div class="detail-copy">
+          An exploration in contextual memory for AI-assisted workflows: persistent structure, meaningful recall, and state that behaves more like continuity than retrieval.
+        </div>
+        <div class="tag-row">
+          <span class="tag-pill">AI</span>
+          <span class="tag-pill">Memory</span>
+          <span class="tag-pill">LLM</span>
+        </div>
+        <div class="detail-link">View on GitHub <span>&rarr;</span></div>
+      </a>
+
+      <a class="detail-card" href="https://github.com/ravii-k/R-Cliponite" target="_blank" rel="noopener" data-reveal>
+        <div class="detail-head">
+          <div>
+            <div class="card-kicker">Desktop Utility</div>
+            <div class="detail-title">R-Cliponite</div>
+          </div>
+          <div class="card-icon" style="background:linear-gradient(135deg,rgba(47,111,255,0.18),rgba(47,200,255,0.18));border:1px solid rgba(47,111,255,0.25)">RC</div>
+        </div>
+        <div class="detail-copy">
+          A lightweight productivity utility built around clipboard speed and repeat-use patterns. The idea is simple: reduce the friction between noticing something useful and actually using it.
+        </div>
+        <div class="tag-row">
+          <span class="tag-pill">Productivity</span>
+          <span class="tag-pill">Utility</span>
+          <span class="tag-pill">Desktop</span>
+        </div>
+        <div class="detail-link">View on GitHub <span>&rarr;</span></div>
+      </a>
+
+      <a class="detail-card" href="https://github.com/ravii-k/R-Journal" target="_blank" rel="noopener" data-reveal>
+        <div class="detail-head">
+          <div>
+            <div class="card-kicker">Native macOS App</div>
+            <div class="detail-title">R-Journal</div>
+          </div>
+          <div class="card-icon" style="background:linear-gradient(135deg,rgba(155,95,255,0.18),rgba(47,111,255,0.2));border:1px solid rgba(155,95,255,0.24)">RJ</div>
+        </div>
+        <div class="detail-copy">
+          A native macOS trading journal for Nifty 50 options traders. It logs CE and PE trades, tracks emotions, enforces personal rules, and measures win rate, expectancy, drawdown, and discipline score with all data stored locally.
+        </div>
+        <div class="tag-row">
+          <span class="tag-pill">SwiftUI</span>
+          <span class="tag-pill">Swift Charts</span>
+          <span class="tag-pill">macOS</span>
+        </div>
+        <div class="detail-link">View on GitHub <span>&rarr;</span></div>
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="notes">
+    <div class="section-header" data-reveal>
+      <div class="section-label">Notes From The Margin</div>
+      <h2 class="section-title">Thoughts on building, writing, and paying attention.</h2>
+      <p class="section-sub">
+        Short observations that sit somewhere between engineering notes, writing journal, and small philosophical arguments.
+      </p>
+    </div>
+
+    <div class="quote-grid">
+      <div class="quote-card" data-reveal>
+        <div class="quote-date">Mar 29 2026</div>
+        <div class="quote-text">Every system I build is a theory about how the world should work. The code is just the argument made concrete. Debugging is often just revising your beliefs.</div>
+      </div>
+
+      <div class="quote-card" data-reveal>
+        <div class="quote-date">Mar 20 2026</div>
+        <div class="quote-text">AI does not think. It reflects. The quality of what it gives you is proportional to the quality of what you bring. The prompt is the mind.</div>
+      </div>
+
+      <div class="quote-card" data-reveal>
+        <div class="quote-date">Mar 12 2026</div>
+        <div class="quote-text"><em>Arjun</em> exists more completely in 80,000 words than most people I will ever meet. Fiction is not escape from truth. It is a way of getting more precise about it.</div>
+      </div>
+
+      <div class="quote-card" data-reveal>
+        <div class="quote-date">Feb 25 2026</div>
+        <div class="quote-text">Design is the conversation between intent and constraint. The most elegant solutions are the ones where you cannot quite tell which side won.</div>
+      </div>
+
+      <div class="quote-card" data-reveal>
+        <div class="quote-date">Feb 10 2026</div>
+        <div class="quote-text">Some places resist being reduced into language. That resistance is sometimes the reason a novel has to exist.</div>
+      </div>
+
+      <div class="quote-card" data-reveal>
+        <div class="quote-date">Jan 28 2026</div>
+        <div class="quote-text">There are builders who build to ship, and builders who build to think. The best ones know which mode they are in and do not confuse the two.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section" id="book">
+    <div class="cta-inner" data-reveal>
+      <div class="section-label" style="position:relative;margin-bottom:16px;">Novel In Progress</div>
+      <h2 class="cta-title">What Remains<br><span class="gradient-text">Of October</span></h2>
+      <p class="cta-sub">
+        A slow-burn romantic tragedy set between Uttarakhand and Delhi. Twenty chapters in progress, built around silence, distance, and the things people fail to say in time.
+      </p>
+      <div class="featured-actions" style="justify-content:center;position:relative;">
+        <a class="btn btn-outline" href="./sample-chapters.pdf" target="_blank" rel="noopener">Sample Chapters (PDF)</a>
+        <a class="btn btn-primary" href="#notes">Read Author Notes</a>
+      </div>
+      <div class="muted-note" style="position:relative;margin-top:24px;">Literary fiction / Uttarakhand + Delhi / 20 chapters drafted</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-logo">Ravi Kashyap.</div>
+  <ul class="footer-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#notes">Notes</a></li>
+    <li><a href="#book">Book</a></li>
+  </ul>
+  <div class="footer-copy">Delhi, India / 2026</div>
+</footer>
+
+<script src="./theme.js"></script>
+<script>
+const homeMarqueeItems = [
+  { name: "Prompt Engineer", tag: "Primary practice", icon: "PE", bg: "rgba(123,47,255,0.15)", border: "rgba(123,47,255,0.3)" },
+  { name: "Agent Workflows", tag: "Collection 01", icon: "AW", bg: "rgba(47,212,160,0.12)", border: "rgba(47,212,160,0.28)" },
+  { name: "Memory Systems", tag: "Collection 02", icon: "MS", bg: "rgba(255,184,0,0.12)", border: "rgba(255,184,0,0.28)" },
+  { name: "Research Intelligence", tag: "Collection 03", icon: "RI", bg: "rgba(123,47,255,0.15)", border: "rgba(123,47,255,0.3)" },
+  { name: "memoryweave", tag: "AI memory systems", icon: "MW", bg: "rgba(47,111,255,0.15)", border: "rgba(47,111,255,0.3)" },
+  { name: "R-Cliponite", tag: "Desktop utility", icon: "RC", bg: "rgba(0,196,255,0.12)", border: "rgba(0,196,255,0.28)" },
+  { name: "R-Journal", tag: "Native macOS app", icon: "RJ", bg: "rgba(155,95,255,0.15)", border: "rgba(155,95,255,0.3)" },
+  { name: "Literary Fiction", tag: "Novel in progress", icon: "LF", bg: "rgba(255,107,53,0.12)", border: "rgba(255,107,53,0.28)" },
+  { name: "Field Notes", tag: "Building and writing", icon: "FN", bg: "rgba(255,107,53,0.12)", border: "rgba(255,107,53,0.28)" },
+  { name: "Delhi", tag: "Home base", icon: "DL", bg: "rgba(47,111,255,0.12)", border: "rgba(47,111,255,0.25)" }
+];
+
+document.addEventListener("DOMContentLoaded", function () {
+  NexusTheme.setupNav("navbar");
+  NexusTheme.setupHeroIntro();
+  NexusTheme.setupReveal();
+  NexusTheme.mountMarquee("home-marquee", homeMarqueeItems);
+  NexusTheme.createHeroScene({ canvasId: "home-hero-canvas", heroSelector: "#hero", widthRatio: 0.72 });
+
+  setTimeout(function () {
+    NexusTheme.animateNumber("site-stat-1", 0, 3, 1200, function (value) {
+      return String(value).padStart(2, "0");
+    });
+    NexusTheme.animateNumber("site-stat-2", 0, 3, 1500, function (value) {
+      return String(value).padStart(2, "0");
+    });
+    NexusTheme.animateNumber("site-stat-3", 0, 20, 1800, function (value) {
+      return String(value).padStart(2, "0");
+    });
+  }, 1300);
+});
+</script>
+</body>
+</html>
