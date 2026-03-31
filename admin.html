@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./theme.css?v=20260401-admin">
+<link rel="stylesheet" href="./theme.css?v=20260401-profile">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -55,7 +55,7 @@
       </h1>
 
       <p class="hero-sub">
-        A private inbox for reviewing contact requests from the public landing page. Sign in with your Supabase Auth account, then let row-level security decide whether this session can see the inbox.
+        A private inbox for reviewing contact requests from the public landing page. Create or sign in to your Supabase Auth account, attach your admin identity, then let row-level security decide whether this session can see the inbox.
       </p>
 
       <div class="hero-actions">
@@ -70,39 +70,82 @@
       <div class="section-label">Private Inbox</div>
       <h2 class="section-title">Keep access narrow. Keep review simple.</h2>
       <p class="section-sub">
-        This page is built for one job: sign in, verify admin access, and read incoming contact requests in a layout that still feels like the rest of the site.
+        This page is built for one job: create or sign in to your admin account, save your name and phone, verify admin access, and read incoming contact requests in a layout that still feels like the rest of the site.
       </p>
     </div>
 
     <div class="admin-stage" id="messages">
       <div class="admin-panel" id="admin-login-state" data-reveal>
         <div class="card-kicker">Authentication</div>
-        <h3 class="admin-panel-title">Admin sign in</h3>
+        <h3 class="admin-panel-title">Admin access</h3>
         <p class="detail-copy">
-          Use the email and password of a Supabase Auth user that you create for yourself. Only users added to <code>public.admin_users</code> will be allowed to read the inbox.
+          Create your admin account once, or sign in with the one you already use. Your display name is stored in Auth metadata. Your phone is stored in profile metadata here unless you later enable phone-based auth in Supabase.
         </p>
 
-        <form class="admin-auth-form" id="admin-login-form">
-          <label class="field-wrap">
-            <span class="field-label">Email</span>
-            <input class="contact-input" type="email" name="email" placeholder="you@example.com" required>
-          </label>
-          <label class="field-wrap">
-            <span class="field-label">Password</span>
-            <input class="contact-input" type="password" name="password" placeholder="Your admin password" required>
-          </label>
-          <div class="admin-toolbar-actions">
-            <button class="btn btn-primary" type="submit">Sign In</button>
+        <div class="dual-grid admin-auth-grid">
+          <div class="detail-card admin-auth-card">
+            <div class="card-kicker">Create Account</div>
+            <h4 class="card-title">Set up the admin identity</h4>
+            <p class="detail-copy">
+              Use this the first time you create your admin login. If email confirmation is enabled in Supabase, you will need to confirm the email before signing in.
+            </p>
+
+            <form class="admin-auth-form" id="admin-register-form">
+              <div class="contact-grid">
+                <label class="field-wrap">
+                  <span class="field-label">Name</span>
+                  <input class="contact-input" type="text" name="display_name" placeholder="Ravi Kashyap" autocomplete="name" required>
+                </label>
+                <label class="field-wrap">
+                  <span class="field-label">Phone</span>
+                  <input class="contact-input" type="tel" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required>
+                </label>
+              </div>
+              <label class="field-wrap">
+                <span class="field-label">Email</span>
+                <input class="contact-input" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+              </label>
+              <label class="field-wrap">
+                <span class="field-label">Password</span>
+                <input class="contact-input" type="password" name="password" placeholder="Create a strong password" autocomplete="new-password" required>
+              </label>
+              <div class="admin-toolbar-actions">
+                <button class="btn btn-primary" type="submit">Create Account</button>
+              </div>
+              <div class="contact-status" id="admin-register-status" aria-live="polite">Create the admin user first, then sign in on the right.</div>
+            </form>
           </div>
-          <div class="contact-status" id="admin-login-status" aria-live="polite">Only approved admin users can see the inbox.</div>
-        </form>
+
+          <div class="detail-card admin-auth-card">
+            <div class="card-kicker">Sign In</div>
+            <h4 class="card-title">Open the inbox</h4>
+            <p class="detail-copy">
+              Use the email and password of your Supabase Auth user. Only users added to <code>public.admin_users</code> will be allowed to read the inbox.
+            </p>
+
+            <form class="admin-auth-form" id="admin-login-form">
+              <label class="field-wrap">
+                <span class="field-label">Email</span>
+                <input class="contact-input" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+              </label>
+              <label class="field-wrap">
+                <span class="field-label">Password</span>
+                <input class="contact-input" type="password" name="password" placeholder="Your admin password" autocomplete="current-password" required>
+              </label>
+              <div class="admin-toolbar-actions">
+                <button class="btn btn-primary" type="submit">Sign In</button>
+              </div>
+              <div class="contact-status" id="admin-login-status" aria-live="polite">Only approved admin users can see the inbox.</div>
+            </form>
+          </div>
+        </div>
       </div>
 
       <div class="admin-panel" id="admin-blocked-state" hidden>
         <div class="card-kicker">Access Pending</div>
         <h3 class="admin-panel-title">Signed in, but not approved yet.</h3>
         <p class="detail-copy">
-          Your Auth session is working, but this user is not in <code>public.admin_users</code> yet. Run the SQL shown below once, then come back here and check access again.
+          Your Auth session is working, but this user is not in <code>public.admin_users</code> yet. Save your profile details if needed, then run the SQL shown below once, and come back here to check access again.
         </p>
 
         <div class="admin-identity-grid">
@@ -114,6 +157,38 @@
             <div class="field-label">User ID</div>
             <div class="admin-token" id="admin-blocked-user-id">-</div>
           </div>
+          <div class="admin-kv">
+            <div class="field-label">Display Name</div>
+            <div class="admin-token" id="admin-blocked-display-name">Not set</div>
+          </div>
+          <div class="admin-kv">
+            <div class="field-label">Phone</div>
+            <div class="admin-token" id="admin-blocked-phone">Not set</div>
+          </div>
+        </div>
+
+        <div class="admin-profile-shell">
+          <div class="field-label">Complete Profile</div>
+          <p class="detail-copy">
+            Save your name and phone here if the user was created earlier without those details. The approval SQL below will refresh with the latest profile values.
+          </p>
+
+          <form class="admin-profile-form" id="admin-blocked-profile-form">
+            <div class="contact-grid">
+              <label class="field-wrap">
+                <span class="field-label">Name</span>
+                <input class="contact-input" type="text" name="display_name" placeholder="Ravi Kashyap" autocomplete="name" required>
+              </label>
+              <label class="field-wrap">
+                <span class="field-label">Phone</span>
+                <input class="contact-input" type="tel" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required>
+              </label>
+            </div>
+            <div class="admin-toolbar-actions">
+              <button class="btn btn-outline" type="submit">Save Profile</button>
+            </div>
+            <div class="contact-status" id="admin-blocked-profile-status" aria-live="polite">Save your name and phone before approving this admin user.</div>
+          </form>
         </div>
 
         <div class="admin-sql-wrap">
@@ -134,7 +209,8 @@
           <div class="admin-toolbar">
             <div>
               <div class="card-kicker">Authenticated Session</div>
-              <div class="admin-panel-title" id="admin-user-email">-</div>
+              <div class="admin-panel-title" id="admin-user-title">-</div>
+              <div class="detail-copy admin-user-meta" id="admin-user-meta">-</div>
             </div>
             <div class="admin-toolbar-actions">
               <button class="btn btn-outline" type="button" id="admin-refresh">Refresh</button>
@@ -155,6 +231,30 @@
               <div class="metric-value" id="admin-latest-date">--</div>
               <div class="metric-label">Latest Arrival</div>
             </div>
+          </div>
+
+          <div class="admin-profile-shell">
+            <div class="field-label">Admin Profile</div>
+            <p class="detail-copy">
+              Update the identity attached to this inbox session. This lets you keep the admin surface tied to your current name and phone.
+            </p>
+
+            <form class="admin-profile-form" id="admin-dashboard-profile-form">
+              <div class="contact-grid">
+                <label class="field-wrap">
+                  <span class="field-label">Name</span>
+                  <input class="contact-input" type="text" name="display_name" placeholder="Ravi Kashyap" autocomplete="name" required>
+                </label>
+                <label class="field-wrap">
+                  <span class="field-label">Phone</span>
+                  <input class="contact-input" type="tel" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required>
+                </label>
+              </div>
+              <div class="admin-toolbar-actions">
+                <button class="btn btn-outline" type="submit">Save Profile</button>
+              </div>
+              <div class="contact-status" id="admin-dashboard-profile-status" aria-live="polite">Profile ready.</div>
+            </form>
           </div>
 
           <div class="admin-search-row">
@@ -184,8 +284,8 @@
   <div class="footer-copy">Private admin page / Supabase inbox</div>
 </footer>
 
-<script src="./supabase-config.js?v=20260401-admin"></script>
-<script src="./theme.js?v=20260401-admin"></script>
-<script type="module" src="./admin.js?v=20260401-admin"></script>
+<script src="./supabase-config.js?v=20260401-profile"></script>
+<script src="./theme.js?v=20260401-profile"></script>
+<script type="module" src="./admin.js?v=20260401-profile"></script>
 </body>
 </html>
