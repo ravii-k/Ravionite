@@ -1,7 +1,9 @@
-# Ravi Kashyap Portfolio
-
+# Ravionite
+---
+> *We are all living in a simulation*
+---
 <p align="center">
-  <strong>A cinematic personal portfolio for AI systems, prompt engineering, writing, and product work.</strong>
+  <strong>This repository is a technical showcase of my skills in AI systems, prompt engineering, and product development, serving as a dedicated testing ground for high-quality writing and functional design. Please reach out if you are looking for premium, visually-driven websites with high-end animations, or custom software and mobile applications for both iOS and Android.</strong>
 </p>
 
 <p align="center">
@@ -13,7 +15,7 @@
 
 ## Overview
 
-This repository contains Ravi Kashyap's portfolio website and prompt-collection pages. The visual language is built around a blue-purple cinematic theme with custom hero animations, glass panels, interactive prompt tabs, and long-form landing page storytelling.
+This repository contains my few informations, projects, and prompt-collection pages. The visual language is built around a blue-purple cinematic theme with custom hero animations, glass panels, interactive prompt tabs, and long-form landing page storytelling.
 
 The site presents work across:
 
@@ -62,12 +64,11 @@ Then visit `http://localhost:8000`.
 └── sample-chapters.pdf
 ```
 
-## Recommended Repository Name
+## 👨‍💻 Author
 
-For GitHub, use:
+**Ravi Kashyap**
+- GitHub: [@Ravionite](https://github.com/ravii-k)
 
-```text
-ravi-kashyap-portfolio
-```
+---
 
-That name is professional, clear, and matches the site's purpose well.
+> Built with ❤️
