@@ -15,7 +15,7 @@
 
 ## Overview
 
-This repository contains my few informations, projects, and prompt-collection pages. The visual language is built around a blue-purple cinematic theme with custom hero animations, glass panels, interactive prompt tabs, and long-form landing page storytelling.
+This repository contains information about me, my projects, and prompt-collection pages. The visual language is built around a blue-purple cinematic theme with custom hero animations, glass panels, interactive prompt tabs, and long-form landing page storytelling.
 
 The site presents work across:
 
