@@ -834,7 +834,7 @@
       if (honeypot && honeypot.value.trim()) {
         form.reset();
         syncCounter();
-        setStatus("Your message is in. I will read it from Supabase.", "success");
+        setStatus("Sent", "success");
         return;
       }
 
@@ -868,7 +868,7 @@
 
         form.reset();
         syncCounter();
-        setStatus("Your message is in. I will read it from Supabase.", "success");
+        setStatus("Sent", "success");
       } catch (error) {
         setStatus(error.message || "Unable to send right now. Please try again later.", "warning");
       } finally {
