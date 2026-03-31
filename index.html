@@ -34,6 +34,7 @@
     <li><a href="#collections">Collections</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#notes">Notes</a></li>
+    <li><a href="#contact">Contact</a></li>
     <li><a href="#book">Book</a></li>
   </ul>
   <a class="btn btn-primary nav-cta" href="#collections">Explore Collections</a>
@@ -244,6 +245,54 @@
     </div>
   </section>
 
+  <div class="divider"></div>
+
+  <section class="section contact-section" id="contact">
+    <div class="contact-layout">
+      <div class="section-header contact-header" data-reveal>
+        <div class="section-label">Contact Me</div>
+        <h2 class="section-title">Bring me in when the work needs a sharper interface, stronger thinking, and cleaner execution.</h2>
+        <p class="section-sub">
+          Use this form if you want a visually-driven website, an AI workflow, prompt engineering support, or a software product that feels intentional from the first interaction. Keep the brief focused and concrete.
+        </p>
+        <div class="contact-band">
+          <span class="tag-pill">Web Design</span>
+          <span class="tag-pill">Prompt Engineering</span>
+          <span class="tag-pill">AI Systems</span>
+          <span class="tag-pill">iOS + macOS</span>
+        </div>
+      </div>
+
+      <form class="contact-card" id="contact-form" data-local-only="true" data-reveal>
+        <div class="contact-grid">
+          <label class="field-wrap">
+            <span class="field-label">Name</span>
+            <input class="contact-input" type="text" name="name" placeholder="Your name" required>
+          </label>
+          <label class="field-wrap">
+            <span class="field-label">Email</span>
+            <input class="contact-input" type="email" name="email" placeholder="you@example.com" required>
+          </label>
+        </div>
+
+        <label class="field-wrap">
+          <span class="field-label">Message</span>
+          <textarea class="contact-textarea" id="contact-message" name="message" rows="7" placeholder="Tell me what you want to build, the stage you are in, and the outcome you care about most." required></textarea>
+        </label>
+
+        <div class="contact-meta">
+          <div class="muted-note" id="contact-word-count">0 / 200 words</div>
+          <div class="muted-note">Message box limit: 200 words</div>
+        </div>
+
+        <div class="contact-actions">
+          <button class="btn btn-primary" type="submit">Send Brief</button>
+          <div class="contact-status" id="contact-status" aria-live="polite">Keep it direct. A sharp first message is easier to respond to well.</div>
+        </div>
+      </form>
+    </div>
+  </section>
+
   <section class="section cta-section" id="book">
     <div class="cta-inner" data-reveal>
       <div class="section-label" style="position:relative;margin-bottom:16px;">Novel In Progress</div>
@@ -266,6 +315,7 @@
     <li><a href="#collections">Collections</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#notes">Notes</a></li>
+    <li><a href="#contact">Contact</a></li>
     <li><a href="#book">Book</a></li>
   </ul>
   <div class="footer-copy">Delhi, India / 2026</div>
@@ -290,6 +340,7 @@ document.addEventListener("DOMContentLoaded", function () {
   NexusTheme.setupNav("navbar");
   NexusTheme.setupHeroIntro();
   NexusTheme.setupReveal();
+  NexusTheme.setupContactForm();
   NexusTheme.mountMarquee("home-marquee", homeMarqueeItems);
   NexusTheme.createHeroScene({ canvasId: "home-hero-canvas", heroSelector: "#hero", widthRatio: 0.72 });
 

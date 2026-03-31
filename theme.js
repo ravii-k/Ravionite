@@ -734,6 +734,54 @@
     });
   }
 
+  function setupContactForm() {
+    var form = document.getElementById("contact-form");
+    var message = document.getElementById("contact-message");
+    var counter = document.getElementById("contact-word-count");
+    var status = document.getElementById("contact-status");
+    var limit = 200;
+
+    if (!form || !message || !counter) return;
+
+    function words(value) {
+      return value.trim().match(/\S+/g) || [];
+    }
+
+    function syncCounter() {
+      var list = words(message.value);
+      if (list.length > limit) {
+        message.value = list.slice(0, limit).join(" ");
+        list = words(message.value);
+      }
+
+      counter.textContent = list.length + " / " + limit + " words";
+      counter.classList.toggle("limit-hit", list.length >= limit);
+
+      if (!status) return;
+
+      if (list.length >= limit) {
+        status.textContent = "Word limit reached. Tighten the brief before sending.";
+        status.className = "contact-status is-warning";
+      } else {
+        status.textContent = "Keep it direct. A sharp first message is easier to respond to well.";
+        status.className = "contact-status";
+      }
+    }
+
+    syncCounter();
+    message.addEventListener("input", syncCounter);
+
+    form.addEventListener("submit", function (event) {
+      if (form.getAttribute("data-local-only") === "true") {
+        event.preventDefault();
+        if (status) {
+          status.textContent = "This form is ready on the page. To receive submissions here, the next step is connecting Supabase.";
+          status.className = "contact-status is-warning";
+        }
+      }
+    });
+  }
+
   window.NexusTheme = {
     animateNumber: animateNumber,
     mountMarquee: mountMarquee,
@@ -741,6 +789,7 @@
     setupScrollProgress: setupScrollProgress,
     setupHeroIntro: setupHeroIntro,
     setupReveal: setupReveal,
+    setupContactForm: setupContactForm,
     createHeroScene: createHeroScene,
     copyText: copyText
   };
