@@ -739,12 +739,29 @@
     var message = document.getElementById("contact-message");
     var counter = document.getElementById("contact-word-count");
     var status = document.getElementById("contact-status");
+    var submit = form ? form.querySelector('button[type="submit"]') : null;
+    var honeypot = form ? form.querySelector('input[name="company"]') : null;
+    var config = window.RavioniteSupabase || null;
     var limit = 200;
+    var defaultStatus = "Keep it direct. A sharp first message is easier to respond to well.";
+    var limitStatus = "Word limit reached. Tighten the brief before sending.";
 
     if (!form || !message || !counter) return;
 
     function words(value) {
       return value.trim().match(/\S+/g) || [];
+    }
+
+    function setStatus(text, tone) {
+      if (!status) return;
+      status.textContent = text;
+      status.className = tone ? "contact-status is-" + tone : "contact-status";
+    }
+
+    function setSubmitting(isSubmitting) {
+      if (!submit) return;
+      submit.disabled = isSubmitting;
+      submit.textContent = isSubmitting ? "Sending..." : "Send Brief";
     }
 
     function syncCounter() {
@@ -757,27 +774,105 @@
       counter.textContent = list.length + " / " + limit + " words";
       counter.classList.toggle("limit-hit", list.length >= limit);
 
-      if (!status) return;
-
       if (list.length >= limit) {
-        status.textContent = "Word limit reached. Tighten the brief before sending.";
-        status.className = "contact-status is-warning";
-      } else {
-        status.textContent = "Keep it direct. A sharp first message is easier to respond to well.";
-        status.className = "contact-status";
+        setStatus(limitStatus, "warning");
+      } else if (status && status.textContent === limitStatus) {
+        setStatus(defaultStatus, "");
+      }
+
+      return list.length;
+    }
+
+    function hasConfig() {
+      return !!(
+        config &&
+        typeof config.url === "string" &&
+        /^https:\/\//.test(config.url) &&
+        config.url.indexOf("YOUR_") === -1 &&
+        typeof config.anonKey === "string" &&
+        config.anonKey &&
+        config.anonKey.indexOf("YOUR_") === -1
+      );
+    }
+
+    function buildEndpoint() {
+      var baseUrl = config.url.replace(/\/+$/, "");
+      var table = encodeURIComponent(config.table || "contact_messages");
+      return baseUrl + "/rest/v1/" + table;
+    }
+
+    async function submitToSupabase(payload) {
+      var response = await fetch(buildEndpoint(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: config.anonKey,
+          Prefer: "return=minimal"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        var messageText = "Unable to send right now. Please try again in a moment.";
+        try {
+          var data = await response.json();
+          messageText = (data && (data.message || data.error_description || data.error)) || messageText;
+        } catch (error) {
+          // Keep the fallback message when the response is not JSON.
+        }
+        throw new Error(messageText);
       }
     }
 
+    setStatus(defaultStatus, "");
     syncCounter();
     message.addEventListener("input", syncCounter);
 
-    form.addEventListener("submit", function (event) {
-      if (form.getAttribute("data-local-only") === "true") {
-        event.preventDefault();
-        if (status) {
-          status.textContent = "This form is ready on the page. To receive submissions here, the next step is connecting Supabase.";
-          status.className = "contact-status is-warning";
-        }
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (honeypot && honeypot.value.trim()) {
+        form.reset();
+        syncCounter();
+        setStatus("Your message is in. I will read it from Supabase.", "success");
+        return;
+      }
+
+      var wordCount = syncCounter();
+      var formData = new FormData(form);
+      var name = String(formData.get("name") || "").trim();
+      var email = String(formData.get("email") || "").trim();
+      var body = String(formData.get("message") || "").trim();
+
+      if (!name || !email || !body || !wordCount) {
+        setStatus("Please fill out your name, email, and message before sending.", "warning");
+        return;
+      }
+
+      if (!hasConfig()) {
+        setStatus("Supabase is not configured yet. Add your project URL and anon key in supabase-config.js.", "warning");
+        return;
+      }
+
+      setSubmitting(true);
+      setStatus("Sending your brief...", "");
+
+      try {
+        await submitToSupabase({
+          name: name,
+          email: email,
+          message: body,
+          word_count: wordCount,
+          source: config.source || "ravionite-website"
+        });
+
+        form.reset();
+        syncCounter();
+        setStatus("Your message is in. I will read it from Supabase.", "success");
+      } catch (error) {
+        setStatus(error.message || "Unable to send right now. Please try again later.", "warning");
+      } finally {
+        setSubmitting(false);
       }
     });
   }
