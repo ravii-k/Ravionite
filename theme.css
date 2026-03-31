@@ -1280,13 +1280,21 @@ a.quote-card {
 
 .contact-input,
 .contact-textarea {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  background: rgba(4, 4, 11, 0.52);
+  background:
+    linear-gradient(180deg, rgba(14, 12, 30, 0.94), rgba(7, 8, 18, 0.92)),
+    radial-gradient(circle at top left, rgba(123, 47, 255, 0.12), transparent 52%);
+  background-color: rgba(7, 8, 18, 0.92);
   color: #fff;
   padding: 16px 18px;
   outline: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(123, 47, 255, 0.06);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
@@ -1298,8 +1306,13 @@ a.quote-card {
 .contact-input:focus,
 .contact-textarea:focus {
   border-color: rgba(123, 47, 255, 0.45);
-  box-shadow: 0 0 0 3px rgba(123, 47, 255, 0.12);
-  background: rgba(6, 6, 16, 0.68);
+  box-shadow:
+    0 0 0 3px rgba(123, 47, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 28px rgba(47, 111, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(16, 14, 34, 0.98), rgba(8, 9, 20, 0.96)),
+    radial-gradient(circle at top left, rgba(123, 47, 255, 0.16), transparent 54%);
 }
 
 .contact-textarea {
