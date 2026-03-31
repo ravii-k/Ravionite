@@ -1,11 +1,15 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const config = window.RavioniteSupabase || null;
-const tableName = config && config.table ? config.table : "contact_messages";
+const messageTableName = config && config.table ? config.table : "contact_messages";
 const adminTableName = "admin_users";
+const requestTableName = config && config.adminRequestTable ? config.adminRequestTable : "admin_requests";
+const adminRequestFunction = config && config.adminRequestFunction ? config.adminRequestFunction : "admin-request-queue";
 const supabase = hasConfig() ? createClient(config.url, config.anonKey) : null;
 
 let allMessages = [];
+let pendingRequests = [];
+let messageTotalCount = 0;
 let currentUser = null;
 let currentAdminRow = null;
 
@@ -18,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!hasConfig()) {
     setLoginStatus("Supabase config is missing. Check supabase-config.js before using this page.", "warning");
+    setRequestStatus("Supabase config is missing. Check supabase-config.js before using this page.", "warning");
     return;
   }
 
@@ -31,24 +36,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function cacheElements() {
   [
-    "admin-login-state",
-    "admin-blocked-state",
-    "admin-dashboard",
-    "admin-register-form",
-    "admin-register-status",
+    "nav-requests-link",
+    "nav-messages-link",
+    "admin-auth-state",
+    "admin-request-form",
+    "admin-request-status",
     "admin-login-form",
     "admin-login-status",
+    "admin-blocked-state",
     "admin-blocked-email",
     "admin-blocked-user-id",
-    "admin-blocked-display-name",
-    "admin-blocked-phone",
-    "admin-approval-sql",
-    "admin-copy-sql",
-    "admin-recheck",
     "admin-signout-blocked",
     "admin-blocked-status",
-    "admin-blocked-profile-form",
-    "admin-blocked-profile-status",
+    "admin-dashboard",
+    "admin-secret-reveal",
+    "admin-secret-email",
+    "admin-secret-password",
+    "admin-request-list",
+    "admin-request-empty",
+    "admin-queue-status",
     "admin-user-title",
     "admin-user-meta",
     "admin-refresh",
@@ -59,9 +65,9 @@ function cacheElements() {
     "admin-results-meta",
     "admin-dashboard-status",
     "admin-message-list",
-    "admin-empty",
+    "admin-message-empty",
     "admin-total-count",
-    "admin-sender-count",
+    "admin-pending-count",
     "admin-latest-date"
   ].forEach(function (id) {
     els[id] = document.getElementById(id);
@@ -83,20 +89,17 @@ function bootTheme() {
 }
 
 function bindEvents() {
-  if (els["admin-register-form"]) {
-    els["admin-register-form"].addEventListener("submit", handleRegister);
+  if (els["admin-request-form"]) {
+    els["admin-request-form"].addEventListener("submit", handleRequestSubmit);
   }
   if (els["admin-login-form"]) {
     els["admin-login-form"].addEventListener("submit", handleLogin);
-  }
-  if (els["admin-blocked-profile-form"]) {
-    els["admin-blocked-profile-form"].addEventListener("submit", handleProfileSave);
   }
   if (els["admin-dashboard-profile-form"]) {
     els["admin-dashboard-profile-form"].addEventListener("submit", handleProfileSave);
   }
   if (els["admin-refresh"]) {
-    els["admin-refresh"].addEventListener("click", refreshMessages);
+    els["admin-refresh"].addEventListener("click", refreshDashboard);
   }
   if (els["admin-signout"]) {
     els["admin-signout"].addEventListener("click", signOut);
@@ -104,14 +107,11 @@ function bindEvents() {
   if (els["admin-signout-blocked"]) {
     els["admin-signout-blocked"].addEventListener("click", signOut);
   }
-  if (els["admin-recheck"]) {
-    els["admin-recheck"].addEventListener("click", recheckAccess);
-  }
-  if (els["admin-copy-sql"]) {
-    els["admin-copy-sql"].addEventListener("click", copyApprovalSql);
-  }
   if (els["admin-search"]) {
     els["admin-search"].addEventListener("input", filterMessages);
+  }
+  if (els["admin-request-list"]) {
+    els["admin-request-list"].addEventListener("click", handleRequestAction);
   }
 }
 
@@ -135,19 +135,24 @@ async function syncSession(session) {
   currentAdminRow = null;
 
   if (!session) {
-    showState("login");
-    setLoginStatus("Only approved admin users can see the inbox.", "");
-    setRegisterStatus("Create the admin user first, then sign in on the right.", "");
+    pendingRequests = [];
     allMessages = [];
+    messageTotalCount = 0;
+    if (els["admin-search"]) els["admin-search"].value = "";
+    renderPendingRequests([]);
     renderMessages([]);
-    updateMetrics([]);
+    updateMetrics();
+    hideSecretReveal();
+    showState("loggedOut");
+    setRequestStatus("This sends a request. It does not create a login immediately.", "");
+    setLoginStatus("Only approved admins can open the request queue and inbox.", "");
     return;
   }
 
   const userResult = await supabase.auth.getUser();
   const user = userResult.data ? userResult.data.user : null;
   if (!user) {
-    showState("login");
+    showState("loggedOut");
     setLoginStatus("Your session could not be verified. Please sign in again.", "warning");
     return;
   }
@@ -158,29 +163,34 @@ async function syncSession(session) {
     .from(adminTableName)
     .select("user_id, email, display_name, phone")
     .eq("user_id", user.id)
-    .limit(1);
+    .maybeSingle();
 
   if (adminResult.error) {
-    showState("login");
+    showState("loggedOut");
     setLoginStatus(adminResult.error.message, "warning");
     return;
   }
 
-  currentAdminRow = adminResult.data && adminResult.data.length ? adminResult.data[0] : null;
-
-  if (!currentAdminRow) {
+  if (!adminResult.data) {
     showBlockedState(user);
     return;
   }
 
+  currentAdminRow = adminResult.data;
   showDashboardState(user, currentAdminRow);
-  await loadMessages();
+  await refreshDashboard();
 }
 
 function showState(state) {
-  toggleHidden(els["admin-login-state"], state !== "login");
+  const dashboardVisible = state === "dashboard";
+  toggleHidden(els["admin-auth-state"], state !== "loggedOut");
   toggleHidden(els["admin-blocked-state"], state !== "blocked");
-  toggleHidden(els["admin-dashboard"], state !== "dashboard");
+  toggleHidden(els["admin-dashboard"], !dashboardVisible);
+  toggleHidden(els["nav-requests-link"], !dashboardVisible);
+  toggleHidden(els["nav-messages-link"], !dashboardVisible);
+  if (!dashboardVisible) {
+    hideSecretReveal();
+  }
 }
 
 function toggleHidden(node, hidden) {
@@ -188,8 +198,8 @@ function toggleHidden(node, hidden) {
   node.hidden = hidden;
 }
 
-function setRegisterStatus(text, tone) {
-  setStatusNode(els["admin-register-status"], text, tone);
+function setRequestStatus(text, tone) {
+  setStatusNode(els["admin-request-status"], text, tone);
 }
 
 function setLoginStatus(text, tone) {
@@ -200,8 +210,8 @@ function setBlockedStatus(text, tone) {
   setStatusNode(els["admin-blocked-status"], text, tone);
 }
 
-function setBlockedProfileStatus(text, tone) {
-  setStatusNode(els["admin-blocked-profile-status"], text, tone);
+function setQueueStatus(text, tone) {
+  setStatusNode(els["admin-queue-status"], text, tone);
 }
 
 function setDashboardStatus(text, tone) {
@@ -219,8 +229,6 @@ function setStatusNode(node, text, tone) {
 }
 
 function showBlockedState(user) {
-  const profile = getProfileSnapshot(user, null);
-
   showState("blocked");
   if (els["admin-blocked-email"]) {
     els["admin-blocked-email"].textContent = user.email || "Unknown email";
@@ -228,24 +236,7 @@ function showBlockedState(user) {
   if (els["admin-blocked-user-id"]) {
     els["admin-blocked-user-id"].textContent = user.id;
   }
-  if (els["admin-blocked-display-name"]) {
-    els["admin-blocked-display-name"].textContent = profile.displayName || "Not set";
-  }
-  if (els["admin-blocked-phone"]) {
-    els["admin-blocked-phone"].textContent = profile.phone || "Not set";
-  }
-  if (els["admin-approval-sql"]) {
-    els["admin-approval-sql"].textContent = buildApprovalSql(user);
-  }
-
-  syncProfileForms(profile);
-  setBlockedStatus("This user still needs an admin row before messages can be read.", "warning");
-  setBlockedProfileStatus(
-    profile.displayName && profile.phone
-      ? "Profile ready. Run the refreshed SQL below, then check access again."
-      : "Save your name and phone first if you want them attached to this admin identity.",
-    profile.displayName && profile.phone ? "success" : "warning"
-  );
+  setBlockedStatus("This Auth account is not approved for Ravionite admin access.", "warning");
 }
 
 function showDashboardState(user, adminRow) {
@@ -253,30 +244,25 @@ function showDashboardState(user, adminRow) {
 
   showState("dashboard");
   if (els["admin-user-title"]) {
-    els["admin-user-title"].textContent = profile.displayName || user.email || "Authenticated admin";
+    els["admin-user-title"].textContent = profile.displayName || user.email || "Approved admin";
   }
   if (els["admin-user-meta"]) {
     const metaLine = [user.email || "", profile.phone || ""].filter(Boolean).join(" · ");
-    els["admin-user-meta"].textContent = metaLine || "Authenticated admin session";
+    els["admin-user-meta"].textContent = metaLine || "Approved admin session";
   }
-
-  syncProfileForms(profile);
+  syncProfileForm(profile);
+  setDashboardProfileStatus(profile.displayName && profile.phone ? "Profile ready." : "Add your name and phone to complete the admin identity.", profile.displayName && profile.phone ? "success" : "warning");
+  setQueueStatus("Request queue ready.", "");
   setDashboardStatus("Inbox ready.", "");
-  setDashboardProfileStatus(
-    profile.displayName && profile.phone ? "Profile ready." : "Add your name and phone to complete the admin identity.",
-    profile.displayName && profile.phone ? "success" : "warning"
-  );
 }
 
-function syncProfileForms(profile) {
-  ["admin-blocked-profile-form", "admin-dashboard-profile-form"].forEach(function (id) {
-    const form = els[id];
-    if (!form) return;
-    const nameInput = form.querySelector('input[name="display_name"]');
-    const phoneInput = form.querySelector('input[name="phone"]');
-    if (nameInput) nameInput.value = profile.displayName || "";
-    if (phoneInput) phoneInput.value = profile.phone || "";
-  });
+function syncProfileForm(profile) {
+  const form = els["admin-dashboard-profile-form"];
+  if (!form) return;
+  const nameInput = form.querySelector('input[name="display_name"]');
+  const phoneInput = form.querySelector('input[name="phone"]');
+  if (nameInput) nameInput.value = profile.displayName || "";
+  if (phoneInput) phoneInput.value = profile.phone || "";
 }
 
 function getProfileSnapshot(user, adminRow) {
@@ -289,8 +275,8 @@ function getProfileSnapshot(user, adminRow) {
       metadata.name
     ),
     phone: firstNonEmpty(
-      user && user.phone,
       adminRow && adminRow.phone,
+      user && user.phone,
       metadata.phone_number,
       metadata.contact_phone,
       metadata.phone
@@ -306,65 +292,49 @@ function firstNonEmpty() {
   return "";
 }
 
-function buildApprovalSql(user) {
-  const profile = getProfileSnapshot(user, currentAdminRow);
-  const safeId = escapeSql(user.id || "");
-  const safeEmail = escapeSql(user.email || "");
-  return "insert into public.admin_users (user_id, email, display_name, phone) values ('" + safeId + "', '" + safeEmail + "', " + sqlNullable(profile.displayName) + ", " + sqlNullable(profile.phone) + ") on conflict (user_id) do update set email = excluded.email, display_name = excluded.display_name, phone = excluded.phone;";
-}
-
-function sqlNullable(value) {
-  return value ? "'" + escapeSql(value) + "'" : "null";
-}
-
-function escapeSql(value) {
-  return String(value).replace(/'/g, "''");
-}
-
-async function handleRegister(event) {
+async function handleRequestSubmit(event) {
   event.preventDefault();
   const form = event.currentTarget;
   const submit = form.querySelector('button[type="submit"]');
   const formData = new FormData(form);
   const displayName = normalizeName(formData.get("display_name"));
   const phone = normalizePhone(formData.get("phone"));
-  const email = String(formData.get("email") || "").trim();
-  const password = String(formData.get("password") || "");
+  const email = normalizeEmail(formData.get("email"));
 
-  const validationError = validateProfileInput(displayName, phone) || validateEmailPassword(email, password);
+  const validationError = validateRequestInput(displayName, phone, email);
   if (validationError) {
-    setRegisterStatus(validationError, "warning");
+    setRequestStatus(validationError, "warning");
     return;
   }
 
-  setButtonState(submit, true, "Creating...");
-  setRegisterStatus("Creating your admin account...", "");
+  setButtonState(submit, true, "Sending...");
+  setRequestStatus("Sending request...", "");
 
-  const result = await supabase.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      emailRedirectTo: getRedirectUrl(),
-      data: buildProfileMetadata(displayName, phone)
-    }
-  });
+  const result = await supabase
+    .from(requestTableName)
+    .insert([{ requested_name: displayName, requested_phone: phone, requested_email: email }]);
 
-  setButtonState(submit, false, "Create Account");
+  setButtonState(submit, false, "Send Request");
 
   if (result.error) {
-    setRegisterStatus(result.error.message, "warning");
+    setRequestStatus(formatRequestInsertError(result.error), "warning");
     return;
   }
 
   form.reset();
+  setRequestStatus("Request sent.", "success");
+}
 
-  if (result.data && result.data.session) {
-    setRegisterStatus("Account created. Finish approval below, then you can open the inbox.", "success");
-    await syncSession(result.data.session);
-    return;
+function formatRequestInsertError(error) {
+  if (!error) return "Could not send the request.";
+  const message = error.message || "Could not send the request.";
+  if (error.code === "23505" || /duplicate/i.test(message)) {
+    return "A pending request already exists for this email.";
   }
-
-  setRegisterStatus("If this is a new email, check your inbox to confirm it. If the user already exists, sign in on the right.", "success");
+  if (/schema cache/i.test(message) || /could not find the table/i.test(message)) {
+    return "The admin request table is not ready in Supabase yet. Run the latest SQL first.";
+  }
+  return message;
 }
 
 async function handleLogin(event) {
@@ -372,7 +342,7 @@ async function handleLogin(event) {
   const form = event.currentTarget;
   const submit = form.querySelector('button[type="submit"]');
   const formData = new FormData(form);
-  const email = String(formData.get("email") || "").trim();
+  const email = normalizeEmail(formData.get("email"));
   const password = String(formData.get("password") || "");
 
   const validationError = validateEmailPassword(email, password, false);
@@ -407,41 +377,50 @@ async function handleProfileSave(event) {
   const formData = new FormData(form);
   const displayName = normalizeName(formData.get("display_name"));
   const phone = normalizePhone(formData.get("phone"));
-  const isBlockedForm = form.id === "admin-blocked-profile-form";
-  const setProfileStatus = isBlockedForm ? setBlockedProfileStatus : setDashboardProfileStatus;
 
   const validationError = validateProfileInput(displayName, phone);
   if (validationError) {
-    setProfileStatus(validationError, "warning");
+    setDashboardProfileStatus(validationError, "warning");
     return;
   }
 
-  if (!currentUser) {
-    setProfileStatus("Sign in first, then save your profile.", "warning");
+  if (!currentUser || !currentAdminRow) {
+    setDashboardProfileStatus("Sign in with an approved admin account first.", "warning");
     return;
   }
 
   setButtonState(submit, true, "Saving...");
-  setProfileStatus("Saving your profile...", "");
+  setDashboardProfileStatus("Saving your profile...", "");
 
-  const result = await supabase.auth.updateUser({
+  const metadataResult = await supabase.auth.updateUser({
     data: buildProfileMetadata(displayName, phone, currentUser.user_metadata || {})
   });
 
-  setButtonState(submit, false, "Save Profile");
-
-  if (result.error) {
-    setProfileStatus(result.error.message, "warning");
+  if (metadataResult.error) {
+    setButtonState(submit, false, "Save Profile");
+    setDashboardProfileStatus(metadataResult.error.message, "warning");
     return;
   }
 
-  const sessionResult = await supabase.auth.getSession();
-  await syncSession(sessionResult.data ? sessionResult.data.session : null);
-  setProfileStatus("Profile saved.", "success");
+  const rowResult = await supabase
+    .from(adminTableName)
+    .update({ display_name: displayName, phone: phone })
+    .eq("user_id", currentUser.id);
 
-  if (isBlockedForm) {
-    setBlockedStatus("Profile saved. The SQL below now includes the latest name and phone details.", "success");
+  setButtonState(submit, false, "Save Profile");
+
+  if (rowResult.error) {
+    setDashboardProfileStatus(rowResult.error.message, "warning");
+    return;
   }
+
+  currentAdminRow = Object.assign({}, currentAdminRow, {
+    display_name: displayName,
+    phone: phone
+  });
+
+  showDashboardState(currentUser, currentAdminRow);
+  setDashboardProfileStatus("Profile saved.", "success");
 }
 
 function buildProfileMetadata(displayName, phone, existing) {
@@ -462,6 +441,14 @@ function normalizePhone(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
 }
 
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function validateRequestInput(displayName, phone, email) {
+  return validateProfileInput(displayName, phone) || validateEmail(email);
+}
+
 function validateProfileInput(displayName, phone) {
   if (displayName.length < 2) {
     return "Enter a valid name with at least 2 characters.";
@@ -475,9 +462,21 @@ function validateProfileInput(displayName, phone) {
   return "";
 }
 
+function validateEmail(email) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return "Enter a valid email address.";
+  }
+  return "";
+}
+
 function validateEmailPassword(email, password, requireStrongPassword) {
   if (!email || !password) {
     return "Enter both your email and password.";
+  }
+
+  const emailError = validateEmail(email);
+  if (emailError) {
+    return emailError;
   }
 
   if (requireStrongPassword !== false && password.length < 8) {
@@ -485,10 +484,6 @@ function validateEmailPassword(email, password, requireStrongPassword) {
   }
 
   return "";
-}
-
-function getRedirectUrl() {
-  return window.location.origin + window.location.pathname;
 }
 
 function setButtonState(button, disabled, text) {
@@ -501,43 +496,213 @@ async function signOut() {
   await supabase.auth.signOut({ scope: "local" });
   currentUser = null;
   currentAdminRow = null;
+  pendingRequests = [];
   allMessages = [];
+  messageTotalCount = 0;
+  if (els["admin-search"]) els["admin-search"].value = "";
+  renderPendingRequests([]);
   renderMessages([]);
-  updateMetrics([]);
-  showState("login");
+  updateMetrics();
+  hideSecretReveal();
+  showState("loggedOut");
   setLoginStatus("Signed out.", "success");
 }
 
-async function recheckAccess() {
-  setBlockedStatus("Checking access again...", "");
-  const result = await supabase.auth.getSession();
-  await syncSession(result.data ? result.data.session : null);
+async function refreshDashboard() {
+  if (!currentAdminRow) return;
+  hideSecretReveal();
+  await Promise.all([loadPendingRequests(), loadMessages()]);
 }
 
-async function refreshMessages() {
-  await loadMessages();
+async function loadPendingRequests() {
+  setQueueStatus("Refreshing request queue...", "");
+
+  const result = await supabase
+    .from(requestTableName)
+    .select("id, requested_name, requested_email, requested_phone, status, requested_at")
+    .eq("status", "pending")
+    .order("requested_at", { ascending: false })
+    .limit(100);
+
+  if (result.error) {
+    pendingRequests = [];
+    renderPendingRequests([]);
+    updateMetrics();
+    setQueueStatus(result.error.message, "warning");
+    return;
+  }
+
+  pendingRequests = result.data || [];
+  renderPendingRequests(pendingRequests);
+  updateMetrics();
+  setQueueStatus(pendingRequests.length ? "Pending requests loaded." : "No pending requests.", pendingRequests.length ? "success" : "");
+}
+
+function renderPendingRequests(requests) {
+  if (!els["admin-request-list"] || !els["admin-request-empty"]) return;
+
+  if (!requests.length) {
+    els["admin-request-list"].innerHTML = "";
+    els["admin-request-empty"].hidden = false;
+    return;
+  }
+
+  els["admin-request-empty"].hidden = true;
+  els["admin-request-list"].innerHTML = requests.map(renderRequestCard).join("");
+}
+
+function renderRequestCard(request) {
+  const requestedAt = formatDate(request.requested_at);
+  const name = escapeHtml(request.requested_name || "Pending request");
+  const email = escapeHtml(request.requested_email || "No email");
+  const phone = escapeHtml(request.requested_phone || "No phone");
+  const requestId = escapeHtml(request.id || "");
+
+  return '<article class="admin-request-card">' +
+    '<div class="admin-message-head">' +
+      '<div>' +
+        '<div class="quote-date">' + requestedAt + '</div>' +
+        '<div class="admin-message-name">' + name + '</div>' +
+      '</div>' +
+      '<a class="admin-email" href="mailto:' + email + '">' + email + '</a>' +
+    '</div>' +
+    '<div class="admin-chip-row">' +
+      '<span class="tag-pill">' + phone + '</span>' +
+      '<span class="tag-pill">Pending</span>' +
+    '</div>' +
+    '<div class="admin-request-actions">' +
+      '<button class="btn btn-primary" type="button" data-request-action="approve" data-request-id="' + requestId + '">Approve</button>' +
+      '<button class="btn btn-outline" type="button" data-request-action="delete" data-request-id="' + requestId + '">Delete</button>' +
+    '</div>' +
+  '</article>';
+}
+
+async function handleRequestAction(event) {
+  const button = event.target.closest("button[data-request-action]");
+  if (!button) return;
+
+  const action = button.getAttribute("data-request-action");
+  const requestId = button.getAttribute("data-request-id");
+  if (!action || !requestId) return;
+
+  setRequestButtonsDisabled(requestId, true);
+  setQueueStatus(action === "approve" ? "Approving request..." : "Deleting request...", "");
+
+  try {
+    const payload = await invokeAdminRequestAction(action, requestId);
+
+    if (action === "approve") {
+      if (payload.mode === "created") {
+        showSecretReveal(payload.email, payload.tempPassword || "-", "Share this temporary password securely. It is shown only now.");
+        setQueueStatus("Request approved. A new admin user was created.", "success");
+      } else {
+        showSecretReveal(payload.email, "No new password", "This email already had an Auth user, so no temporary password was created.");
+        setQueueStatus("Request approved. An existing Auth user was promoted to admin.", "success");
+      }
+    } else {
+      hideSecretReveal();
+      setQueueStatus("Request deleted.", "success");
+    }
+
+    await loadPendingRequests();
+  } catch (error) {
+    hideSecretReveal();
+    setQueueStatus(error instanceof Error ? error.message : "Could not process the request.", "warning");
+  } finally {
+    setRequestButtonsDisabled(requestId, false);
+  }
+}
+
+function setRequestButtonsDisabled(requestId, disabled) {
+  const selector = 'button[data-request-id="' + cssEscape(requestId) + '"]';
+  document.querySelectorAll(selector).forEach(function (button) {
+    button.disabled = disabled;
+  });
+}
+
+function cssEscape(value) {
+  if (window.CSS && typeof window.CSS.escape === "function") {
+    return window.CSS.escape(value);
+  }
+  return String(value).replace(/"/g, '\\"');
+}
+
+async function invokeAdminRequestAction(action, requestId) {
+  const sessionResult = await supabase.auth.getSession();
+  const session = sessionResult.data ? sessionResult.data.session : null;
+  if (!session || !session.access_token) {
+    throw new Error("Your session expired. Sign in again.");
+  }
+
+  const response = await fetch(config.url + "/functions/v1/" + adminRequestFunction, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + session.access_token,
+      "apikey": config.anonKey
+    },
+    body: JSON.stringify({ action: action, requestId: requestId })
+  });
+
+  const text = await response.text();
+  let payload = {};
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch (_error) {
+      payload = { error: text };
+    }
+  }
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error("The admin approval function is not deployed in Supabase yet.");
+    }
+    throw new Error(payload && payload.error ? payload.error : "Could not process this admin request.");
+  }
+
+  return payload;
+}
+
+function showSecretReveal(email, password, note) {
+  if (els["admin-secret-email"]) {
+    els["admin-secret-email"].textContent = email || "-";
+  }
+  if (els["admin-secret-password"]) {
+    els["admin-secret-password"].textContent = password || "-";
+  }
+  toggleHidden(els["admin-secret-reveal"], false);
+  if (note) {
+    setQueueStatus(note, "success");
+  }
+}
+
+function hideSecretReveal() {
+  toggleHidden(els["admin-secret-reveal"], true);
 }
 
 async function loadMessages() {
   setDashboardStatus("Refreshing inbox...", "");
 
   const result = await supabase
-    .from(tableName)
+    .from(messageTableName)
     .select("id, name, email, message, word_count, source, created_at", { count: "exact" })
     .order("created_at", { ascending: false })
     .limit(200);
 
   if (result.error) {
     allMessages = [];
+    messageTotalCount = 0;
     renderMessages([]);
-    updateMetrics([]);
+    updateMetrics();
     setDashboardStatus(result.error.message, "warning");
     return;
   }
 
   allMessages = result.data || [];
+  messageTotalCount = typeof result.count === "number" ? result.count : allMessages.length;
   filterMessages();
-  updateMetrics(allMessages, result.count || allMessages.length);
+  updateMetrics();
   setDashboardStatus(allMessages.length ? "Inbox synced." : "No messages yet.", allMessages.length ? "success" : "");
 }
 
@@ -559,15 +724,15 @@ function filterMessages() {
 }
 
 function renderMessages(messages) {
-  if (!els["admin-message-list"] || !els["admin-empty"]) return;
+  if (!els["admin-message-list"] || !els["admin-message-empty"]) return;
 
   if (!messages.length) {
     els["admin-message-list"].innerHTML = "";
-    els["admin-empty"].hidden = false;
+    els["admin-message-empty"].hidden = false;
     return;
   }
 
-  els["admin-empty"].hidden = true;
+  els["admin-message-empty"].hidden = true;
   els["admin-message-list"].innerHTML = messages.map(renderMessageCard).join("");
 }
 
@@ -595,15 +760,10 @@ function renderMessageCard(message) {
   '</article>';
 }
 
-function updateMetrics(messages, totalCount) {
-  const total = typeof totalCount === "number" ? totalCount : messages.length;
-  const uniqueSenders = new Set(messages.map(function (item) {
-    return (item.email || "").toLowerCase();
-  }).filter(Boolean)).size;
-  const latest = messages.length ? formatShortDate(messages[0].created_at) : "--";
-
-  if (els["admin-total-count"]) els["admin-total-count"].textContent = padMetric(total);
-  if (els["admin-sender-count"]) els["admin-sender-count"].textContent = padMetric(uniqueSenders);
+function updateMetrics() {
+  const latest = allMessages.length ? formatShortDate(allMessages[0].created_at) : "--";
+  if (els["admin-total-count"]) els["admin-total-count"].textContent = padMetric(messageTotalCount);
+  if (els["admin-pending-count"]) els["admin-pending-count"].textContent = padMetric(pendingRequests.length);
   if (els["admin-latest-date"]) els["admin-latest-date"].textContent = latest;
 }
 
@@ -635,14 +795,4 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
-}
-
-async function copyApprovalSql() {
-  if (!els["admin-approval-sql"] || !window.NexusTheme || !window.NexusTheme.copyText) return;
-  try {
-    await window.NexusTheme.copyText(els["admin-approval-sql"].textContent || "");
-    setBlockedStatus("SQL copied. Run it in Supabase, then come back here.", "success");
-  } catch (_error) {
-    setBlockedStatus("Could not copy automatically. Select the SQL and copy it manually.", "warning");
-  }
 }

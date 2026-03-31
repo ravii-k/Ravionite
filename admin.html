@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ravionite Admin</title>
-<meta name="description" content="Private admin inbox for Ravionite contact messages.">
+<meta name="description" content="Private admin inbox and approval queue for Ravionite.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./theme.css?v=20260401-profile">
+<link rel="stylesheet" href="./theme.css?v=20260401-requests">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -34,7 +34,8 @@
   </a>
   <ul class="nav-links">
     <li><a href="#auth">Access</a></li>
-    <li><a href="#messages">Messages</a></li>
+    <li id="nav-requests-link" hidden><a href="#request-queue">Requests</a></li>
+    <li id="nav-messages-link" hidden><a href="#messages">Messages</a></li>
   </ul>
   <a class="btn btn-outline nav-cta" href="./index.html">Back To Hub</a>
 </nav>
@@ -50,16 +51,16 @@
       </div>
 
       <h1 class="hero-title">
-        <span class="hero-line"><span class="hero-line-inner">Messages</span></span>
+        <span class="hero-line"><span class="hero-line-inner">Admin Queue</span></span>
         <span class="hero-line"><span class="hero-line-inner">For <span class="gradient-text">Ravionite.</span></span></span>
       </h1>
 
       <p class="hero-sub">
-        A private inbox for reviewing contact requests from the public landing page. Create or sign in to your Supabase Auth account, attach your admin identity, then let row-level security decide whether this session can see the inbox.
+        Public users can request admin access here. Approved admins can sign in, review pending requests, approve or delete them, and read the contact inbox from one controlled surface.
       </p>
 
       <div class="hero-actions">
-        <a class="btn btn-primary btn-lg" href="#auth">Open Inbox</a>
+        <a class="btn btn-primary btn-lg" href="#auth">Open Access</a>
         <a class="btn btn-outline btn-lg" href="./index.html">Back To Website</a>
       </div>
     </div>
@@ -68,29 +69,29 @@
   <section class="section admin-shell" id="auth">
     <div class="section-header" data-reveal>
       <div class="section-label">Private Inbox</div>
-      <h2 class="section-title">Keep access narrow. Keep review simple.</h2>
+      <h2 class="section-title">Separate requests from real admin access.</h2>
       <p class="section-sub">
-        This page is built for one job: create or sign in to your admin account, save your name and phone, verify admin access, and read incoming contact requests in a layout that still feels like the rest of the site.
+        The public form only creates a request. It does not create a login immediately. A real admin account is created only after an approved admin reviews and approves that request.
       </p>
     </div>
 
-    <div class="admin-stage" id="messages">
-      <div class="admin-panel" id="admin-login-state" data-reveal>
-        <div class="card-kicker">Authentication</div>
-        <h3 class="admin-panel-title">Admin access</h3>
+    <div class="admin-stage">
+      <div class="admin-panel" id="admin-auth-state" data-reveal>
+        <div class="card-kicker">Access Layer</div>
+        <h3 class="admin-panel-title">Request access or sign in.</h3>
         <p class="detail-copy">
-          Create your admin account once, or sign in with the one you already use. Your display name is stored in Auth metadata. Your phone is stored in profile metadata here unless you later enable phone-based auth in Supabase.
+          New users submit an access request with name, phone, and email. Existing approved admins sign in with email and password to manage the queue and inbox.
         </p>
 
         <div class="dual-grid admin-auth-grid">
           <div class="detail-card admin-auth-card">
             <div class="card-kicker">Create Account</div>
-            <h4 class="card-title">Set up the admin identity</h4>
+            <h4 class="card-title">Send an admin request</h4>
             <p class="detail-copy">
-              Use this the first time you create your admin login. If email confirmation is enabled in Supabase, you will need to confirm the email before signing in.
+              This form sends a request for review. When an approved admin accepts it, a real Auth admin account is created securely on the backend.
             </p>
 
-            <form class="admin-auth-form" id="admin-register-form">
+            <form class="admin-auth-form" id="admin-request-form">
               <div class="contact-grid">
                 <label class="field-wrap">
                   <span class="field-label">Name</span>
@@ -105,22 +106,18 @@
                 <span class="field-label">Email</span>
                 <input class="contact-input" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
               </label>
-              <label class="field-wrap">
-                <span class="field-label">Password</span>
-                <input class="contact-input" type="password" name="password" placeholder="Create a strong password" autocomplete="new-password" required>
-              </label>
               <div class="admin-toolbar-actions">
-                <button class="btn btn-primary" type="submit">Create Account</button>
+                <button class="btn btn-primary" type="submit">Send Request</button>
               </div>
-              <div class="contact-status" id="admin-register-status" aria-live="polite">Create the admin user first, then sign in on the right.</div>
+              <div class="contact-status" id="admin-request-status" aria-live="polite">This sends a request. It does not create a login immediately.</div>
             </form>
           </div>
 
           <div class="detail-card admin-auth-card">
             <div class="card-kicker">Sign In</div>
-            <h4 class="card-title">Open the inbox</h4>
+            <h4 class="card-title">Open the admin queue</h4>
             <p class="detail-copy">
-              Use the email and password of your Supabase Auth user. Only users added to <code>public.admin_users</code> will be allowed to read the inbox.
+              Sign in only if you are already an approved admin. Authenticated Session, Admin Profile, Requests, and Search Inbox stay hidden until an approved session is verified.
             </p>
 
             <form class="admin-auth-form" id="admin-login-form">
@@ -135,17 +132,17 @@
               <div class="admin-toolbar-actions">
                 <button class="btn btn-primary" type="submit">Sign In</button>
               </div>
-              <div class="contact-status" id="admin-login-status" aria-live="polite">Only approved admin users can see the inbox.</div>
+              <div class="contact-status" id="admin-login-status" aria-live="polite">Only approved admins can open the request queue and inbox.</div>
             </form>
           </div>
         </div>
       </div>
 
       <div class="admin-panel" id="admin-blocked-state" hidden>
-        <div class="card-kicker">Access Pending</div>
-        <h3 class="admin-panel-title">Signed in, but not approved yet.</h3>
+        <div class="card-kicker">Restricted</div>
+        <h3 class="admin-panel-title">Signed in, but not approved.</h3>
         <p class="detail-copy">
-          Your Auth session is working, but this user is not in <code>public.admin_users</code> yet. Save your profile details if needed, then run the SQL shown below once, and come back here to check access again.
+          This Auth account exists, but it is not approved to manage Ravionite requests or messages on this project.
         </p>
 
         <div class="admin-identity-grid">
@@ -157,51 +154,12 @@
             <div class="field-label">User ID</div>
             <div class="admin-token" id="admin-blocked-user-id">-</div>
           </div>
-          <div class="admin-kv">
-            <div class="field-label">Display Name</div>
-            <div class="admin-token" id="admin-blocked-display-name">Not set</div>
-          </div>
-          <div class="admin-kv">
-            <div class="field-label">Phone</div>
-            <div class="admin-token" id="admin-blocked-phone">Not set</div>
-          </div>
-        </div>
-
-        <div class="admin-profile-shell">
-          <div class="field-label">Complete Profile</div>
-          <p class="detail-copy">
-            Save your name and phone here if the user was created earlier without those details. The approval SQL below will refresh with the latest profile values.
-          </p>
-
-          <form class="admin-profile-form" id="admin-blocked-profile-form">
-            <div class="contact-grid">
-              <label class="field-wrap">
-                <span class="field-label">Name</span>
-                <input class="contact-input" type="text" name="display_name" placeholder="Ravi Kashyap" autocomplete="name" required>
-              </label>
-              <label class="field-wrap">
-                <span class="field-label">Phone</span>
-                <input class="contact-input" type="tel" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required>
-              </label>
-            </div>
-            <div class="admin-toolbar-actions">
-              <button class="btn btn-outline" type="submit">Save Profile</button>
-            </div>
-            <div class="contact-status" id="admin-blocked-profile-status" aria-live="polite">Save your name and phone before approving this admin user.</div>
-          </form>
-        </div>
-
-        <div class="admin-sql-wrap">
-          <div class="field-label">SQL To Run In Supabase</div>
-          <pre class="admin-sql" id="admin-approval-sql"></pre>
         </div>
 
         <div class="admin-toolbar-actions">
-          <button class="btn btn-outline" type="button" id="admin-copy-sql">Copy SQL</button>
-          <button class="btn btn-primary" type="button" id="admin-recheck">Check Access</button>
           <button class="btn btn-outline" type="button" id="admin-signout-blocked">Sign Out</button>
         </div>
-        <div class="contact-status is-warning" id="admin-blocked-status">This user still needs an admin row before messages can be read.</div>
+        <div class="contact-status is-warning" id="admin-blocked-status">Only approved admins can open the queue and inbox.</div>
       </div>
 
       <div class="admin-dashboard" id="admin-dashboard" hidden>
@@ -224,8 +182,8 @@
               <div class="metric-label">Total Messages</div>
             </div>
             <div class="metric">
-              <div class="metric-value" id="admin-sender-count">00</div>
-              <div class="metric-label">Unique Senders</div>
+              <div class="metric-value" id="admin-pending-count">00</div>
+              <div class="metric-label">Pending Requests</div>
             </div>
             <div class="metric">
               <div class="metric-value" id="admin-latest-date">--</div>
@@ -236,7 +194,7 @@
           <div class="admin-profile-shell">
             <div class="field-label">Admin Profile</div>
             <p class="detail-copy">
-              Update the identity attached to this inbox session. This lets you keep the admin surface tied to your current name and phone.
+              Keep the approved admin identity current here. This updates your visible name and phone for the admin surface.
             </p>
 
             <form class="admin-profile-form" id="admin-dashboard-profile-form">
@@ -257,7 +215,29 @@
             </form>
           </div>
 
-          <div class="admin-search-row">
+          <div class="admin-request-shell" id="request-queue">
+            <div class="field-label">Pending Admin Requests</div>
+            <p class="detail-copy">
+              Approve a request to create or promote a real Auth admin. New users get a temporary password shown once here, so share it securely.
+            </p>
+            <div class="contact-status" id="admin-queue-status" aria-live="polite">Request queue ready.</div>
+
+            <div class="admin-secret-reveal" id="admin-secret-reveal" hidden>
+              <div class="admin-kv">
+                <div class="field-label">Approved Email</div>
+                <div class="admin-token" id="admin-secret-email">-</div>
+              </div>
+              <div class="admin-kv">
+                <div class="field-label">Temporary Password</div>
+                <div class="admin-token" id="admin-secret-password">-</div>
+              </div>
+            </div>
+
+            <div class="admin-request-list" id="admin-request-list"></div>
+            <div class="admin-empty" id="admin-request-empty" hidden>No pending admin requests.</div>
+          </div>
+
+          <div class="admin-search-row" id="messages">
             <label class="field-wrap admin-search-field">
               <span class="field-label">Search Inbox</span>
               <input class="contact-input" type="search" id="admin-search" placeholder="Search by name, email, or message">
@@ -267,7 +247,7 @@
 
           <div class="contact-status" id="admin-dashboard-status" aria-live="polite">Inbox ready.</div>
           <div class="admin-message-list" id="admin-message-list"></div>
-          <div class="admin-empty" id="admin-empty" hidden>No messages yet.</div>
+          <div class="admin-empty" id="admin-message-empty" hidden>No messages yet.</div>
         </div>
       </div>
     </div>
@@ -278,14 +258,15 @@
   <div class="footer-logo">Ravionite</div>
   <ul class="footer-links">
     <li><a href="#auth">Access</a></li>
+    <li><a href="#request-queue">Requests</a></li>
     <li><a href="#messages">Messages</a></li>
     <li><a href="./index.html">Hub</a></li>
   </ul>
-  <div class="footer-copy">Private admin page / Supabase inbox</div>
+  <div class="footer-copy">Private admin page / request queue / Supabase inbox</div>
 </footer>
 
-<script src="./supabase-config.js?v=20260401-profile"></script>
-<script src="./theme.js?v=20260401-profile"></script>
-<script type="module" src="./admin.js?v=20260401-profile"></script>
+<script src="./supabase-config.js?v=20260401-requests"></script>
+<script src="./theme.js?v=20260401-requests"></script>
+<script type="module" src="./admin.js?v=20260401-requests"></script>
 </body>
 </html>
