@@ -1871,3 +1871,228 @@ body.page-research .featured-wrap {
     width: 100%;
   }
 }
+
+
+.admin-page .hero {
+  min-height: 92vh;
+}
+
+.admin-page .hero-content {
+  max-width: 720px;
+}
+
+.admin-shell {
+  padding-top: 50px;
+}
+
+.admin-stage {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 32px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 24px 60px rgba(123, 47, 255, 0.14);
+}
+
+.admin-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(123, 47, 255, 0.7), rgba(96, 165, 255, 0.68), transparent);
+}
+
+.admin-panel-title {
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.admin-auth-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.admin-dashboard {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.admin-toolbar-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-search-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  margin: 28px 0 18px;
+}
+
+.admin-search-field {
+  flex: 1;
+}
+
+.admin-results-meta {
+  flex-shrink: 0;
+  padding-bottom: 12px;
+}
+
+.admin-message-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.admin-message-card {
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.admin-message-card:hover {
+  border-color: var(--card-border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 22px 48px rgba(123, 47, 255, 0.12);
+}
+
+.admin-message-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-message-name {
+  font-family: var(--font-display);
+  font-size: 1.16rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.admin-email {
+  color: var(--blue-light);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  word-break: break-all;
+}
+
+.admin-email:hover {
+  color: #fff;
+}
+
+.admin-message-copy {
+  color: #fff;
+  font-size: 0.94rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.admin-chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.admin-empty {
+  margin-top: 18px;
+  padding: 34px;
+  border-radius: 18px;
+  border: 1px dashed rgba(123, 47, 255, 0.2);
+  color: var(--muted);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.admin-kv {
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.admin-token {
+  margin-top: 12px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  line-height: 1.75;
+  word-break: break-word;
+}
+
+.admin-sql-wrap {
+  margin-top: 24px;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(123, 47, 255, 0.16);
+  background: rgba(4, 4, 11, 0.76);
+}
+
+.admin-sql {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  line-height: 1.8;
+}
+
+.admin-panel .contact-status {
+  max-width: none;
+}
+
+@media (max-width: 960px) {
+  .admin-toolbar,
+  .admin-search-row,
+  .admin-toolbar-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-message-list,
+  .admin-identity-grid {
+    grid-template-columns: 1fr;
+  }
+}
