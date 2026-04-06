@@ -1,4 +1,4 @@
-project_id = "gzculsnslxdsvblrtjdr"
+project_id = "set-locally-via-supabase-link"
 
 [functions.public-site-gateway]
 verify_jwt = false

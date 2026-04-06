@@ -239,9 +239,9 @@
     NexusTheme.createHeroScene({
       canvasId: "collection-hero-canvas",
       heroSelector: "#hero",
-      widthRatio: config.heroWidthRatio || 0.41,
-      sceneScale: config.sceneScale || 0.7,
-      sceneX: typeof config.sceneX === "number" ? config.sceneX : -0.16,
+      widthRatio: config.heroWidthRatio || 0.56,
+      sceneScale: config.sceneScale || 0.66,
+      sceneX: typeof config.sceneX === "number" ? config.sceneX : 0.08,
       sceneY: typeof config.sceneY === "number" ? config.sceneY : 0,
       variant: config.sceneVariant || "workflow"
     });

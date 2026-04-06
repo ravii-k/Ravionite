@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-supabase-url="https://gzculsnslxdsvblrtjdr.supabase.co">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -221,30 +221,9 @@
       </p>
     </div>
 
-    <div class="quote-grid">
-      <div class="quote-card" data-reveal>
-        <div class="quote-text">Every system I build is a theory about how the world should work. The code is just the argument made concrete. Debugging is often just revising your beliefs.</div>
-      </div>
-
-      <div class="quote-card" data-reveal>
-        <div class="quote-text">AI does not think. It reflects. The quality of what it gives you is proportional to the quality of what you bring. The prompt is the mind.</div>
-      </div>
-
-      <div class="quote-card" data-reveal>
-        <div class="quote-text"><em>Arjun</em> exists more completely in 80,000 words than most people I will ever meet. Fiction is not escape from truth. It is a way of getting more precise about it.</div>
-      </div>
-
-      <div class="quote-card" data-reveal>
-        <div class="quote-text">Design is the conversation between intent and constraint. The most elegant solutions are the ones where you cannot quite tell which side won.</div>
-      </div>
-
-      <div class="quote-card" data-reveal>
-        <div class="quote-text">Some places resist being reduced into language. That resistance is sometimes the reason a novel has to exist.</div>
-      </div>
-
-      <div class="quote-card" data-reveal>
-        <div class="quote-text">There are builders who build to ship, and builders who build to think. The best ones know which mode they are in and do not confuse the two.</div>
-      </div>
+    <div class="quote-grid" id="thoughts-grid"></div>
+    <div class="thoughts-actions">
+      <button class="btn btn-outline" id="thoughts-toggle" type="button" hidden>See More Thoughts</button>
     </div>
   </section>
 
@@ -350,9 +329,10 @@ document.addEventListener("DOMContentLoaded", function () {
   NexusTheme.setupHeroIntro();
   NexusTheme.setupReveal();
   NexusTheme.setupContactForm();
+  NexusTheme.setupThoughtArchive();
   NexusTheme.setupSampleChapterAccess();
   NexusTheme.mountMarquee("home-marquee", homeMarqueeItems);
-  NexusTheme.createHeroScene({ canvasId: "home-hero-canvas", heroSelector: "#hero", widthRatio: 0.43, sceneScale: 0.7, sceneX: -0.12 });
+  NexusTheme.createHeroScene({ canvasId: "home-hero-canvas", heroSelector: "#hero", widthRatio: 0.64, sceneScale: 0.68, sceneX: 0.1 });
 
   setTimeout(function () {
     NexusTheme.animateNumber("site-stat-1", 0, 4, 1200, function (value) {
@@ -366,6 +346,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }, 1300);
 });
+
+window.RavioniteThoughtsSeed = [
+  "Every system I build is a theory about how the world should work. The code is just the argument made concrete. Debugging is often just revising your beliefs.",
+  "AI does not think. It reflects. The quality of what it gives you is proportional to the quality of what you bring. The prompt is the mind.",
+  "Arjun exists more completely in 80,000 words than most people I will ever meet. Fiction is not escape from truth. It is a way of getting more precise about it.",
+  "Design is the conversation between intent and constraint. The most elegant solutions are the ones where you cannot quite tell which side won.",
+  "Some places resist being reduced into language. That resistance is sometimes the reason a novel has to exist.",
+  "There are builders who build to ship, and builders who build to think. The best ones know which mode they are in and do not confuse the two."
+];
 </script>
 </body>
 </html>

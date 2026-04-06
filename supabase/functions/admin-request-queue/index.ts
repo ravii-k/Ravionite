@@ -202,7 +202,7 @@ function buildInviteRedirect(req) {
   if (referer) return referer;
 
   const siteUrl = normalizeUrl(Deno.env.get("SITE_URL") || "");
-  return siteUrl ? siteUrl + "/ravionite-ops-vault-7c9d.html" : "";
+  return siteUrl ? siteUrl + "/ops" : "";
 }
 
 function normalizeUrl(value) {

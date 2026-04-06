@@ -55,6 +55,9 @@ Deno.serve(async function (req) {
     if (action === "sample_chapter") {
       return await handleSampleChapter(req, adminClient, corsHeaders);
     }
+    if (action === "latest_thoughts") {
+      return await handleLatestThoughts(body, adminClient, corsHeaders);
+    }
     return json({ error: "Unknown action." }, 400, corsHeaders);
   } catch (error) {
     return json({ error: error instanceof Error ? error.message : "Unexpected error." }, 500, corsHeaders);
@@ -187,6 +190,22 @@ async function handleSampleChapter(req: Request, adminClient: ReturnType<typeof 
 
   await recordEvent(adminClient, "sample_chapter", actorHash, null);
   return json({ success: true, url: signedUrlResult.data.signedUrl }, 200, corsHeaders);
+}
+
+async function handleLatestThoughts(body: Record<string, unknown>, adminClient: ReturnType<typeof createClient>, corsHeaders: HeadersInit) {
+  const requestedLimit = Math.max(1, Math.min(Number(body.limit) || 12, 24));
+  const result = await adminClient
+    .from("thoughts")
+    .select("id, body, created_at")
+    .eq("is_published", true)
+    .order("created_at", { ascending: false })
+    .limit(requestedLimit);
+
+  if (result.error) {
+    return json({ error: result.error.message }, 400, corsHeaders);
+  }
+
+  return json({ success: true, thoughts: result.data || [] }, 200, corsHeaders);
 }
 
 async function enforceRateLimit(

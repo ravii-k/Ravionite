@@ -5,5 +5,4 @@ Thumbs.db
 .env.*
 sample-chapters.pdf
 supabase-config.local.js
-netlify.toml
 supabase/.temp/

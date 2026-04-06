@@ -102,3 +102,114 @@ using (
     where admin_users.user_id = (select auth.uid())
   )
 );
+
+create table if not exists public.thoughts (
+  id uuid primary key default gen_random_uuid(),
+  body text not null,
+  is_published boolean not null default true,
+  created_at timestamptz not null default timezone('utc', now()),
+  updated_at timestamptz not null default timezone('utc', now()),
+  created_by uuid references auth.users (id) on delete set null,
+  updated_by uuid references auth.users (id) on delete set null
+);
+
+alter table public.thoughts
+  add column if not exists is_published boolean not null default true;
+
+alter table public.thoughts
+  add column if not exists created_by uuid references auth.users (id) on delete set null;
+
+alter table public.thoughts
+  add column if not exists updated_by uuid references auth.users (id) on delete set null;
+
+alter table public.thoughts
+  add column if not exists updated_at timestamptz not null default timezone('utc', now());
+
+alter table public.thoughts
+  drop constraint if exists thoughts_body_check;
+alter table public.thoughts
+  add constraint thoughts_body_check
+  check (char_length(trim(body)) between 12 and 480);
+
+alter table public.thoughts enable row level security;
+
+create index if not exists thoughts_created_at_idx
+  on public.thoughts (created_at desc);
+
+create index if not exists thoughts_published_created_idx
+  on public.thoughts (is_published, created_at desc);
+
+drop policy if exists "Approved admins can view thoughts" on public.thoughts;
+create policy "Approved admins can view thoughts"
+on public.thoughts
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_users
+    where admin_users.user_id = (select auth.uid())
+  )
+);
+
+drop policy if exists "Approved admins can insert thoughts" on public.thoughts;
+create policy "Approved admins can insert thoughts"
+on public.thoughts
+for insert
+to authenticated
+with check (
+  exists (
+    select 1
+    from public.admin_users
+    where admin_users.user_id = (select auth.uid())
+  )
+);
+
+drop policy if exists "Approved admins can update thoughts" on public.thoughts;
+create policy "Approved admins can update thoughts"
+on public.thoughts
+for update
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_users
+    where admin_users.user_id = (select auth.uid())
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.admin_users
+    where admin_users.user_id = (select auth.uid())
+  )
+);
+
+drop policy if exists "Approved admins can delete thoughts" on public.thoughts;
+create policy "Approved admins can delete thoughts"
+on public.thoughts
+for delete
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_users
+    where admin_users.user_id = (select auth.uid())
+  )
+);
+
+insert into public.thoughts (body, is_published)
+select seed.body, true
+from (
+  values
+    ('Every system I build is a theory about how the world should work. The code is just the argument made concrete. Debugging is often just revising your beliefs.'),
+    ('AI does not think. It reflects. The quality of what it gives you is proportional to the quality of what you bring. The prompt is the mind.'),
+    ('Arjun exists more completely in 80,000 words than most people I will ever meet. Fiction is not escape from truth. It is a way of getting more precise about it.'),
+    ('Design is the conversation between intent and constraint. The most elegant solutions are the ones where you cannot quite tell which side won.'),
+    ('Some places resist being reduced into language. That resistance is sometimes the reason a novel has to exist.'),
+    ('There are builders who build to ship, and builders who build to think. The best ones know which mode they are in and do not confuse the two.')
+) as seed(body)
+where not exists (
+  select 1
+  from public.thoughts
+);

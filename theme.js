@@ -4,8 +4,12 @@
   }
 
   function getPublicGatewayEndpoint() {
+    if (window.__RAVIONITE_CONFIG__ && window.__RAVIONITE_CONFIG__.publicGatewayEndpoint) {
+      return window.__RAVIONITE_CONFIG__.publicGatewayEndpoint;
+    }
+
     var baseUrl = getSupabaseUrl().replace(/\/+$/, "");
-    return baseUrl ? baseUrl + "/functions/v1/public-site-gateway" : "";
+    return baseUrl ? baseUrl + "/functions/v1/public-site-gateway" : "/.netlify/functions/site-gateway";
   }
 
   async function callPublicGateway(action, payload) {
@@ -866,6 +870,15 @@
     });
   }
 
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function setupContactForm() {
     var form = document.getElementById("contact-form");
     var message = document.getElementById("contact-message");
@@ -991,6 +1004,48 @@
     });
   }
 
+  function setupThoughtArchive() {
+    var grid = document.getElementById("thoughts-grid");
+    var toggle = document.getElementById("thoughts-toggle");
+    if (!grid) return;
+
+    var expanded = false;
+    var seed = Array.isArray(window.RavioniteThoughtsSeed) ? window.RavioniteThoughtsSeed.slice() : [];
+    var thoughts = seed.map(function (body, index) {
+      return { id: "seed-" + index, body: body };
+    });
+
+    function render() {
+      var visible = expanded ? thoughts : thoughts.slice(0, 4);
+      grid.innerHTML = visible.map(function (thought) {
+        return '<div class="quote-card" data-reveal><div class="quote-text">' + escapeHtml(thought.body || "") + '</div></div>';
+      }).join("");
+
+      if (toggle) {
+        toggle.hidden = thoughts.length <= 4;
+        toggle.textContent = expanded ? "Show Fewer Thoughts" : "See More Thoughts";
+      }
+    }
+
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        expanded = !expanded;
+        render();
+      });
+    }
+
+    render();
+
+    callPublicGateway("latest_thoughts", { limit: 12 }).then(function (payload) {
+      var next = payload && Array.isArray(payload.thoughts) ? payload.thoughts : [];
+      if (!next.length) return;
+      thoughts = next;
+      render();
+    }).catch(function () {
+      render();
+    });
+  }
+
   window.NexusTheme = {
     animateNumber: animateNumber,
     mountMarquee: mountMarquee,
@@ -999,6 +1054,7 @@
     setupHeroIntro: setupHeroIntro,
     setupReveal: setupReveal,
     setupContactForm: setupContactForm,
+    setupThoughtArchive: setupThoughtArchive,
     setupSampleChapterAccess: setupSampleChapterAccess,
     createHeroScene: createHeroScene,
     copyText: copyText

@@ -1,10 +1,11 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const storageKey = "ravionite.admin.publishable_key";
-const projectUrl = document.documentElement.dataset.supabaseUrl || "";
+const projectUrl = (window.__RAVIONITE_CONFIG__ && window.__RAVIONITE_CONFIG__.supabaseUrl) || document.documentElement.dataset.supabaseUrl || "";
 const adminTableName = "admin_users";
 const messageTableName = "contact_messages";
 const requestTableName = "admin_requests";
+const thoughtTableName = "thoughts";
 const publicFunctionName = "public-site-gateway";
 const adminRequestFunction = "admin-request-queue";
 
@@ -12,6 +13,7 @@ let supabase = null;
 let authSubscription = null;
 let allMessages = [];
 let pendingRequests = [];
+let allThoughts = [];
 let messageTotalCount = 0;
 let currentUser = null;
 let currentAdminRow = null;
@@ -52,6 +54,10 @@ function cacheElements() {
     "admin-signout",
     "admin-dashboard-profile-form",
     "admin-dashboard-profile-status",
+    "admin-thought-form",
+    "admin-thought-status",
+    "admin-thought-list",
+    "admin-thought-empty",
     "admin-search",
     "admin-results-meta",
     "admin-dashboard-status",
@@ -74,9 +80,9 @@ function bootTheme() {
   window.NexusTheme.createHeroScene({
     canvasId: "admin-hero-canvas",
     heroSelector: "#admin-hero",
-    widthRatio: 0.41,
-    sceneScale: 0.7,
-    sceneX: -0.12,
+    widthRatio: 0.56,
+    sceneScale: 0.66,
+    sceneX: 0.06,
     variant: "research"
   });
 }
@@ -94,6 +100,9 @@ function bindEvents() {
   if (els["admin-dashboard-profile-form"]) {
     els["admin-dashboard-profile-form"].addEventListener("submit", handleProfileSave);
   }
+  if (els["admin-thought-form"]) {
+    els["admin-thought-form"].addEventListener("submit", handleThoughtSubmit);
+  }
   if (els["admin-refresh"]) {
     els["admin-refresh"].addEventListener("click", refreshDashboard);
   }
@@ -108,6 +117,9 @@ function bindEvents() {
   }
   if (els["admin-request-list"]) {
     els["admin-request-list"].addEventListener("click", handleRequestAction);
+  }
+  if (els["admin-thought-list"]) {
+    els["admin-thought-list"].addEventListener("click", handleThoughtAction);
   }
 }
 
@@ -170,10 +182,12 @@ async function syncSession(session) {
   if (!supabase || !session) {
     pendingRequests = [];
     allMessages = [];
+    allThoughts = [];
     messageTotalCount = 0;
     if (els["admin-search"]) els["admin-search"].value = "";
     renderPendingRequests([]);
     renderMessages([]);
+    renderThoughts([]);
     updateMetrics();
     showState("loggedOut");
     setRequestStatus("This sends a request. It does not create a login immediately.", "");
@@ -251,6 +265,10 @@ function setDashboardProfileStatus(text, tone) {
   setStatusNode(els["admin-dashboard-profile-status"], text, tone);
 }
 
+function setThoughtStatus(text, tone) {
+  setStatusNode(els["admin-thought-status"], text, tone);
+}
+
 function setStatusNode(node, text, tone) {
   if (!node) return;
   node.textContent = text;
@@ -281,6 +299,7 @@ function showDashboardState(user, adminRow) {
   }
   syncProfileForm(profile);
   setDashboardProfileStatus(profile.displayName && profile.phone ? "Profile ready." : "Add your name and phone to complete the admin identity.", profile.displayName && profile.phone ? "success" : "warning");
+  setThoughtStatus("Thought studio ready.", "");
   setQueueStatus("Request queue ready.", "");
   setDashboardStatus("Inbox ready.", "");
 }
@@ -408,9 +427,11 @@ function forgetPublishableKey() {
   currentAdminRow = null;
   pendingRequests = [];
   allMessages = [];
+  allThoughts = [];
   messageTotalCount = 0;
   renderPendingRequests([]);
   renderMessages([]);
+  renderThoughts([]);
   updateMetrics();
   showState("loggedOut");
   setLoginStatus("Publishable key cleared from this browser.", "success");
@@ -465,6 +486,142 @@ async function handleProfileSave(event) {
   setDashboardProfileStatus("Profile saved.", "success");
 }
 
+async function handleThoughtSubmit(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const submit = form.querySelector('button[type="submit"]');
+  const formData = new FormData(form);
+  const body = normalizeThought(formData.get("thought_body"));
+  const isPublished = formData.get("is_published") === "on";
+  const validationError = validateThought(body);
+
+  if (validationError) {
+    setThoughtStatus(validationError, "warning");
+    return;
+  }
+
+  if (!currentUser || !supabase) {
+    setThoughtStatus("Sign in with an approved admin account first.", "warning");
+    return;
+  }
+
+  setButtonState(submit, true, "Saving...");
+  setThoughtStatus("Saving thought...", "");
+
+  const result = await supabase
+    .from(thoughtTableName)
+    .insert({
+      body: body,
+      is_published: isPublished,
+      created_by: currentUser.id,
+      updated_by: currentUser.id
+    });
+
+  setButtonState(submit, false, "Add Thought");
+
+  if (result.error) {
+    setThoughtStatus(result.error.message, "warning");
+    return;
+  }
+
+  form.reset();
+  const checkbox = form.querySelector('input[name="is_published"]');
+  if (checkbox) checkbox.checked = true;
+  setThoughtStatus(isPublished ? "Thought published." : "Thought saved as draft.", "success");
+  await loadThoughts();
+}
+
+async function loadThoughts() {
+  setThoughtStatus("Refreshing thoughts...", "");
+
+  const result = await supabase
+    .from(thoughtTableName)
+    .select("id, body, is_published, created_at, updated_at")
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (result.error) {
+    allThoughts = [];
+    renderThoughts([]);
+    setThoughtStatus(result.error.message, "warning");
+    return;
+  }
+
+  allThoughts = result.data || [];
+  renderThoughts(allThoughts);
+  setThoughtStatus(allThoughts.length ? "Thought archive synced." : "No thoughts yet.", allThoughts.length ? "success" : "");
+}
+
+function renderThoughts(thoughts) {
+  if (!els["admin-thought-list"] || !els["admin-thought-empty"]) return;
+  if (!thoughts.length) {
+    els["admin-thought-list"].innerHTML = "";
+    els["admin-thought-empty"].hidden = false;
+    return;
+  }
+
+  els["admin-thought-empty"].hidden = true;
+  els["admin-thought-list"].innerHTML = thoughts.map(renderThoughtCard).join("");
+}
+
+function renderThoughtCard(thought) {
+  const thoughtId = escapeHtml(thought.id || "");
+  const body = escapeHtml(thought.body || "");
+  const createdAt = formatDate(thought.created_at);
+  const statusLabel = thought.is_published ? "Published" : "Draft";
+
+  return '<article class="admin-thought-card">' +
+    '<div class="admin-message-head">' +
+      '<div>' +
+        '<div class="quote-date">' + createdAt + '</div>' +
+        '<div class="admin-message-name">Thought</div>' +
+      '</div>' +
+      '<span class="tag-pill">' + statusLabel + '</span>' +
+    '</div>' +
+    '<div class="admin-message-copy">' + body + '</div>' +
+    '<div class="admin-thought-actions">' +
+      '<button class="btn btn-outline" type="button" data-thought-action="toggle" data-thought-id="' + thoughtId + '" data-thought-published="' + (thought.is_published ? 'true' : 'false') + '">' + (thought.is_published ? 'Unpublish' : 'Publish') + '</button>' +
+      '<button class="btn btn-outline" type="button" data-thought-action="delete" data-thought-id="' + thoughtId + '">Delete</button>' +
+    '</div>' +
+  '</article>';
+}
+
+async function handleThoughtAction(event) {
+  const button = event.target.closest("button[data-thought-action]");
+  if (!button || !supabase || !currentUser) return;
+
+  const action = button.getAttribute("data-thought-action");
+  const thoughtId = button.getAttribute("data-thought-id");
+  const published = button.getAttribute("data-thought-published") === "true";
+  if (!action || !thoughtId) return;
+
+  setButtonState(button, true, action === "delete" ? "Deleting..." : published ? "Unpublishing..." : "Publishing...");
+  setThoughtStatus(action === "delete" ? "Deleting thought..." : published ? "Unpublishing thought..." : "Publishing thought...", "");
+
+  let result;
+  if (action === "delete") {
+    result = await supabase.from(thoughtTableName).delete().eq("id", thoughtId);
+  } else {
+    result = await supabase
+      .from(thoughtTableName)
+      .update({
+        is_published: !published,
+        updated_at: new Date().toISOString(),
+        updated_by: currentUser.id
+      })
+      .eq("id", thoughtId);
+  }
+
+  if (result.error) {
+    setButtonState(button, false, action === "delete" ? "Delete" : published ? "Unpublish" : "Publish");
+    setThoughtStatus(result.error.message, "warning");
+    return;
+  }
+
+  setThoughtStatus(action === "delete" ? "Thought deleted." : !published ? "Thought published." : "Thought moved to draft.", "success");
+  await loadThoughts();
+}
+
 function buildProfileMetadata(displayName, phone, existing) {
   const next = Object.assign({}, existing || {});
   next.display_name = displayName;
@@ -487,6 +644,10 @@ function normalizeEmail(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+function normalizeThought(value) {
+  return String(value || "").replace(/\s+/g, " ").trim().slice(0, 480);
+}
+
 function validateRequestInput(displayName, phone, email) {
   return validateProfileInput(displayName, phone) || validateEmail(email);
 }
@@ -498,6 +659,16 @@ function validateProfileInput(displayName, phone) {
   const digits = phone.replace(/\D/g, "");
   if (digits.length < 7 || digits.length > 15) {
     return "Enter a valid phone number.";
+  }
+  return "";
+}
+
+function validateThought(value) {
+  if (value.length < 12) {
+    return "Write a thought with at least 12 characters.";
+  }
+  if (value.length > 480) {
+    return "Keep each thought under 480 characters.";
   }
   return "";
 }
@@ -536,18 +707,20 @@ async function signOut() {
   currentAdminRow = null;
   pendingRequests = [];
   allMessages = [];
+  allThoughts = [];
   messageTotalCount = 0;
   if (els["admin-search"]) els["admin-search"].value = "";
   renderPendingRequests([]);
   renderMessages([]);
+  renderThoughts([]);
   updateMetrics();
   showState("loggedOut");
-  setLoginStatus("Signed out.", "success");
+  window.location.href = "/ops-signout";
 }
 
 async function refreshDashboard() {
   if (!currentAdminRow || !supabase) return;
-  await Promise.all([loadPendingRequests(), loadMessages()]);
+  await Promise.all([loadPendingRequests(), loadMessages(), loadThoughts()]);
 }
 
 async function loadPendingRequests() {
