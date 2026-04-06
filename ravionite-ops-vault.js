@@ -74,8 +74,9 @@ function bootTheme() {
   window.NexusTheme.createHeroScene({
     canvasId: "admin-hero-canvas",
     heroSelector: "#admin-hero",
-    widthRatio: 0.46,
-    sceneScale: 0.76,
+    widthRatio: 0.41,
+    sceneScale: 0.7,
+    sceneX: -0.12,
     variant: "research"
   });
 }

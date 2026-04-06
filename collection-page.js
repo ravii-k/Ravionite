@@ -239,8 +239,10 @@
     NexusTheme.createHeroScene({
       canvasId: "collection-hero-canvas",
       heroSelector: "#hero",
-      widthRatio: config.heroWidthRatio || 0.46,
-      sceneScale: config.sceneScale || 0.76,
+      widthRatio: config.heroWidthRatio || 0.41,
+      sceneScale: config.sceneScale || 0.7,
+      sceneX: typeof config.sceneX === "number" ? config.sceneX : -0.16,
+      sceneY: typeof config.sceneY === "number" ? config.sceneY : 0,
       variant: config.sceneVariant || "workflow"
     });
     NexusTheme.setupReveal();

@@ -20,6 +20,10 @@
 
 html { scroll-behavior: smooth; }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   background: var(--bg);
   color: #fff;
@@ -391,17 +395,22 @@ body::after {
   right: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.74;
+  transform: translateX(1%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.62) 18%, #000 33%, #000 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.62) 18%, #000 33%, #000 100%);
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 620px;
+  width: min(100%, 740px);
+  max-width: 740px;
 }
 
 .hero-home .hero-content {
-  max-width: 560px;
+  width: min(100%, 740px);
+  max-width: 740px;
 }
 
 .hero-badge {
@@ -448,6 +457,7 @@ body::after {
 .hero-line {
   overflow: hidden;
   display: block;
+  padding-right: 0.14em;
 }
 
 .hero-line-inner {
@@ -1626,7 +1636,8 @@ body.collection-page .hero {
 }
 
 body.collection-page .hero-content {
-  max-width: 640px;
+  width: min(100%, 720px);
+  max-width: 720px;
 }
 
 body.collection-page .hero::before {
@@ -1907,6 +1918,7 @@ body.page-research .featured-wrap {
 }
 
 .admin-page .hero-content {
+  width: min(100%, 720px);
   max-width: 720px;
 }
 

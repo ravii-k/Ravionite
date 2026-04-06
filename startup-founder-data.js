@@ -2,8 +2,9 @@ window.collectionConfig = {
   "metaTitle": "Startup Founder Prompts - Ravionite",
   "pageClass": "page-founder",
   "sceneVariant": "founder",
-  "heroWidthRatio": 0.46,
-  "sceneScale": 0.76,
+  "heroWidthRatio": 0.38,
+  "sceneScale": 0.64,
+  "sceneX": -0.46,
   "navMeta": "Collection 02 / Startup Founder Prompts",
   "hero": {
     "badge": "Collection 02 / Startup Founder Prompts",

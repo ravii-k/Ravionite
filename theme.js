@@ -252,6 +252,8 @@
 
     var root = new THREE.Group();
     root.scale.setScalar(options.sceneScale || 0.8);
+    root.position.x = typeof options.sceneX === "number" ? options.sceneX : 0;
+    root.position.y = typeof options.sceneY === "number" ? options.sceneY : 0;
     scene.add(root);
     var animatedMaterials = [];
 
