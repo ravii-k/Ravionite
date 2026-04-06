@@ -33,9 +33,10 @@ with check ((select auth.uid()) = user_id);
 
 create table if not exists public.admin_requests (
   id uuid primary key default gen_random_uuid(),
-  requested_name text not null check (char_length(trim(requested_name)) between 2 and 120),
-  requested_email text not null check (requested_email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$'),
-  requested_phone text not null check (char_length(regexp_replace(requested_phone, '\D', '', 'g')) between 7 and 15),
+  requested_name text not null,
+  requested_email text not null,
+  requested_phone text not null,
+  actor_hash text not null default 'legacy',
   status text not null default 'pending' check (status in ('pending', 'approved', 'deleted')),
   requested_at timestamptz not null default timezone('utc', now()),
   resolved_at timestamptz,
@@ -44,23 +45,37 @@ create table if not exists public.admin_requests (
   resolution_note text
 );
 
+alter table public.admin_requests
+  add column if not exists actor_hash text not null default 'legacy';
+
+alter table public.admin_requests
+  drop constraint if exists admin_requests_requested_name_check;
+alter table public.admin_requests
+  add constraint admin_requests_requested_name_check
+  check (char_length(trim(requested_name)) between 2 and 120);
+
+alter table public.admin_requests
+  drop constraint if exists admin_requests_requested_email_check;
+alter table public.admin_requests
+  add constraint admin_requests_requested_email_check
+  check (lower(trim(requested_email)) ~ '^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$');
+
+alter table public.admin_requests
+  drop constraint if exists admin_requests_requested_phone_check;
+alter table public.admin_requests
+  add constraint admin_requests_requested_phone_check
+  check (char_length(regexp_replace(requested_phone, '\D', '', 'g')) between 7 and 15);
+
 alter table public.admin_requests enable row level security;
 
 create unique index if not exists admin_requests_pending_email_idx
   on public.admin_requests (lower(requested_email))
   where status = 'pending';
 
+create index if not exists admin_requests_requested_at_idx
+  on public.admin_requests (requested_at desc);
+
 drop policy if exists "Anyone can submit admin requests" on public.admin_requests;
-create policy "Anyone can submit admin requests"
-on public.admin_requests
-for insert
-to anon, authenticated
-with check (
-  status = 'pending'
-  and char_length(trim(requested_name)) between 2 and 120
-  and requested_email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$'
-  and char_length(regexp_replace(requested_phone, '\D', '', 'g')) between 7 and 15
-);
 
 drop policy if exists "Approved admins can view admin requests" on public.admin_requests;
 create policy "Approved admins can view admin requests"

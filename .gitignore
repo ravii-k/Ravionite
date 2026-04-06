@@ -1,3 +1,8 @@
 .DS_Store
 Thumbs.db
 .vscode/
+.env
+.env.*
+sample-chapters.pdf
+supabase-config.local.js
+netlify.toml

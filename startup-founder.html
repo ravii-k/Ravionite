@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Founder Prompts - Ravionite</title>
+<meta name="description" content="Prompt collection for startup founders: market analysis, offer design, distribution planning, competitive mapping, and scaling systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./theme.css?v=20260406-secure">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+<div class="bg-canvas">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="glow g4"></div>
+  <div class="glow g5"></div>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<nav id="navbar" class="site-nav">
+  <a class="nav-logo" href="./index.html" aria-label="Ravionite home">
+    <span class="logo-mark" aria-hidden="true">
+      <span class="logo-orbit logo-orbit-a"></span>
+      <span class="logo-orbit logo-orbit-b"></span>
+      <span class="logo-mark-text">RK</span>
+    </span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+  </ul>
+  <div class="muted-note" id="collectionMeta"></div>
+  <a class="btn btn-outline nav-cta" href="./index.html">Back To Hub</a>
+</nav>
+
+<main class="page">
+  <section class="hero" id="hero">
+    <canvas id="collection-hero-canvas" class="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span id="collectionBadgeText"></span>
+      </div>
+      <h1 class="hero-title" id="collectionHeroTitle"></h1>
+      <p class="hero-sub" id="collectionSubtitle"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" id="collectionPrimaryCta" href="#prompts"></a>
+        <button class="btn btn-outline btn-lg" id="collectionQuickCopy" type="button"></button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat1">00</div>
+          <div class="stat-label" id="collectionStatLabel1"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat2">00</div>
+          <div class="stat-label" id="collectionStatLabel2"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="collectionStat3">00</div>
+          <div class="stat-label" id="collectionStatLabel3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="toolkit">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="introLabel"></div>
+      <h2 class="section-title" id="introTitle"></h2>
+      <p class="section-sub" id="introCopy"></p>
+    </div>
+
+    <div class="alert-banner alert-banner-danger" data-reveal>
+      <div class="alert-icon">&#9888;</div>
+      <div>
+        <div class="alert-title" id="warningTitle"></div>
+        <div class="alert-text" id="warningText"></div>
+        <div class="chip-row" id="warningChips"></div>
+      </div>
+    </div>
+
+    <div class="sequence-grid" id="stepsGrid" style="margin-top:44px;"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="prompts">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="promptLabel"></div>
+      <h2 class="section-title" id="promptTitle"></h2>
+      <p class="section-sub" id="promptCopy"></p>
+    </div>
+    <div class="prompt-grid" id="promptsGrid"></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="workflow">
+    <div class="section-header" data-reveal>
+      <div class="section-label" id="workflowLabel"></div>
+      <h2 class="section-title" id="workflowTitle"></h2>
+      <p class="section-sub" id="workflowCopy"></p>
+    </div>
+
+    <div class="featured-wrap" data-reveal>
+      <div>
+        <div class="featured-badge" id="workflowBadge"></div>
+        <div class="featured-title" id="workflowMainLine"></div>
+        <div class="featured-copy">Use these as a founder operating stack: size the market first, rank the problems honestly, sharpen the positioning, then choose the channel and scale plan that match the actual business.</div>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue1"></div>
+            <div class="metric-label" id="workflowMetricLabel1"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue2"></div>
+            <div class="metric-label" id="workflowMetricLabel2"></div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="workflowMetricValue3"></div>
+            <div class="metric-label" id="workflowMetricLabel3"></div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Workflow coverage</span>
+            <span id="workflow-fill">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="workflow-progress"></div>
+          </div>
+        </div>
+
+        <div class="featured-actions">
+          <button class="btn btn-primary" id="workflowCopyBtn" type="button"></button>
+          <a class="btn btn-outline" href="./index.html">Back To Hub</a>
+        </div>
+      </div>
+
+      <div class="featured-visual">
+        <div class="orbit-system">
+          <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+          <div class="orbit orbit-2"><div class="orbit-dot orbit-dot-2"></div></div>
+          <div class="orbit orbit-3"></div>
+          <div class="orbit-center">SF</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="cta-inner" data-reveal>
+      <div class="section-label" style="position:relative;margin-bottom:16px;">Collection Footer</div>
+      <h2 class="cta-title" id="ctaTitle"></h2>
+      <p class="cta-sub" id="ctaSub"></p>
+      <div class="cta-btns">
+        <a class="btn btn-primary btn-lg" id="ctaPrimary" href="#prompts"></a>
+        <a class="btn btn-outline btn-lg" href="./index.html">Back To Hub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-logo">Startup Founder Prompts</div>
+  <ul class="footer-links">
+    <li><a href="#toolkit">Toolkit</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="./index.html">Hub</a></li>
+  </ul>
+  <div class="footer-copy">Crafted by Ravi Kashyap</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-card">
+    <button class="overlay-close" type="button" id="overlayClose">&times;</button>
+    <div class="overlay-tag" id="overlayTag"></div>
+    <div class="overlay-title" id="overlayTitle"></div>
+    <div class="overlay-desc" id="overlayDesc"></div>
+    <div class="overlay-prompt" id="overlayPrompt"></div>
+    <button class="overlay-copy-btn" id="overlayCopyBtn" type="button">Copy Full Prompt</button>
+  </div>
+</div>
+
+<script src="./theme.js?v=20260406-secure"></script>
+<script src="./startup-founder-data.js?v=20260406-secure"></script>
+<script src="./collection-page.js?v=20260406-secure"></script>
+</body>
+</html>

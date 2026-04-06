@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="./index.html">Home</a> ·
+  <a href="./startup-founder.html">Startup Founder</a> ·
   <a href="./research-intelligence.html">Research Intelligence</a> ·
   <a href="./agent-workflows.html">Agent Workflows</a> ·
   <a href="./memory-systems.html">Memory Systems</a>
@@ -23,10 +24,12 @@ The site presents work across:
 - Research-driven prompt collections
 - Writing and book sample chapters
 - Software projects, including `R-Journal`
+- Private admin request and inbox workflow backed by Supabase Edge Functions
 
 ## Included Pages
 
 - `index.html` - Main landing page
+- `startup-founder.html` - Founder-focused prompt collection for market, offer, growth, and scale decisions
 - `research-intelligence.html` - Flagship research prompt collection
 - `agent-workflows.html` - Prompt collection for orchestration and tool-driven agents
 - `memory-systems.html` - Prompt collection for memory architecture and state design
@@ -37,7 +40,8 @@ The site presents work across:
 - Shared visual system lives in `theme.css`
 - Shared animation logic lives in `theme.js`
 - Collection page interactions live in `collection-page.js`
-- `sample-chapters.pdf` is linked from the site as book sample material
+- Book sample chapters are intended to be served through private Supabase Storage signed URLs
+- Public forms are routed through Supabase Edge Functions instead of direct browser-to-table writes
 
 ## Local Preview
 
@@ -54,6 +58,7 @@ Then visit `http://localhost:8000`.
 ```text
 .
 ├── index.html
+├── startup-founder.html
 ├── research-intelligence.html
 ├── agent-workflows.html
 ├── memory-systems.html
@@ -61,7 +66,7 @@ Then visit `http://localhost:8000`.
 ├── theme.css
 ├── theme.js
 ├── collection-page.js
-└── sample-chapters.pdf
+└── supabase/
 ```
 
 ## 👨‍💻 Author

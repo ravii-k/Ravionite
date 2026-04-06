@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Research Intelligence - Ravi Kashyap</title>
+<title>Research Intelligence - Ravionite</title>
 <meta name="description" content="Nine professional-grade AI prompts for deep literature analysis, contradiction mapping, gap finding, and synthesis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./theme.css?v=20260331-supabase">
+<link rel="stylesheet" href="./theme.css?v=20260406-secure">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -24,7 +24,7 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <nav id="navbar" class="site-nav">
-  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+  <a class="nav-logo" href="./index.html" aria-label="Ravionite home">
     <span class="logo-mark" aria-hidden="true">
       <span class="logo-orbit logo-orbit-a"></span>
       <span class="logo-orbit logo-orbit-b"></span>
@@ -46,7 +46,7 @@
     <div class="hero-content">
       <div class="hero-badge">
         <div class="badge-dot"></div>
-        Collection 03 / Research Intelligence
+        Collection 04 / Research Intelligence
       </div>
 
       <h1 class="hero-title">
@@ -246,7 +246,7 @@
   </div>
 </div>
 
-<script src="./theme.js?v=20260331-supabase"></script>
+<script src="./theme.js?v=20260406-secure"></script>
 <script>
 const promptsData = [
   {
@@ -619,7 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
   NexusTheme.setupScrollProgress("scrollProgress");
   NexusTheme.setupHeroIntro();
   NexusTheme.setupReveal();
-  NexusTheme.createHeroScene({ canvasId: "research-hero-canvas", heroSelector: "#hero", widthRatio: 0.58, variant: "research" });
+  NexusTheme.createHeroScene({ canvasId: "research-hero-canvas", heroSelector: "#hero", widthRatio: 0.46, sceneScale: 0.76, variant: "research" });
 
   window.setTimeout(function () {
     NexusTheme.animateNumber("research-stat-1", 0, 9, 1400, function (value) {

@@ -239,7 +239,8 @@
     NexusTheme.createHeroScene({
       canvasId: "collection-hero-canvas",
       heroSelector: "#hero",
-      widthRatio: config.heroWidthRatio || 0.58,
+      widthRatio: config.heroWidthRatio || 0.46,
+      sceneScale: config.sceneScale || 0.76,
       variant: config.sceneVariant || "workflow"
     });
     NexusTheme.setupReveal();

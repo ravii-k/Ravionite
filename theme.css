@@ -66,52 +66,52 @@ body::after {
 .glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(110px);
+  filter: blur(78px);
 }
 
 .g1 {
-  width: 750px;
-  height: 750px;
-  background: radial-gradient(circle, rgba(123, 47, 255, 0.55) 0%, transparent 70%);
-  top: -250px;
-  left: -150px;
-  animation: drift-a 20s ease-in-out infinite alternate;
+  width: 540px;
+  height: 540px;
+  background: radial-gradient(circle, rgba(123, 47, 255, 0.3) 0%, transparent 70%);
+  top: -210px;
+  left: -120px;
+  animation: drift-a 24s ease-in-out infinite alternate;
 }
 
 .g2 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(47, 111, 255, 0.45) 0%, transparent 70%);
-  top: 0;
-  right: -180px;
-  animation: drift-b 24s ease-in-out infinite alternate;
+  width: 440px;
+  height: 440px;
+  background: radial-gradient(circle, rgba(47, 111, 255, 0.28) 0%, transparent 70%);
+  top: 10px;
+  right: -150px;
+  animation: drift-b 28s ease-in-out infinite alternate;
 }
 
 .g3 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(123, 47, 255, 0.25) 0%, transparent 70%);
-  top: 55vh;
-  left: 25%;
-  animation: drift-c 28s ease-in-out infinite alternate;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(123, 47, 255, 0.14) 0%, transparent 70%);
+  top: 58vh;
+  left: 28%;
+  animation: drift-c 32s ease-in-out infinite alternate;
 }
 
 .g4 {
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(47, 111, 255, 0.3) 0%, transparent 70%);
-  top: 115vh;
-  right: 6%;
-  animation: drift-a 22s ease-in-out infinite alternate-reverse;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(47, 111, 255, 0.16) 0%, transparent 70%);
+  top: 118vh;
+  right: 8%;
+  animation: drift-a 28s ease-in-out infinite alternate-reverse;
 }
 
 .g5 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(155, 95, 255, 0.2) 0%, transparent 70%);
-  top: 195vh;
-  left: 10%;
-  animation: drift-b 26s ease-in-out infinite alternate;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(155, 95, 255, 0.1) 0%, transparent 70%);
+  top: 198vh;
+  left: 12%;
+  animation: drift-b 30s ease-in-out infinite alternate;
 }
 
 @keyframes drift-a {
@@ -156,8 +156,8 @@ body::after {
   padding: 18px 60px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  justify-content: flex-start;
+  gap: 18px;
   background: rgba(4, 4, 11, 0.55);
   border-bottom: 1px solid var(--card-border);
   backdrop-filter: blur(20px);
@@ -175,6 +175,7 @@ body::after {
   gap: 12px;
   text-decoration: none;
   white-space: nowrap;
+  margin-right: auto;
 }
 
 .logo-mark {
@@ -267,9 +268,10 @@ body::after {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 2.4rem;
-  flex: 1;
-  justify-content: center;
+  gap: 1.05rem;
+  flex: none;
+  margin-left: auto;
+  justify-content: flex-end;
 }
 
 .nav-links a {
@@ -288,11 +290,13 @@ body::after {
 
 .nav-cta {
   flex-shrink: 0;
+  margin-left: 0.35rem;
 }
 
 .site-nav .muted-note {
   flex-shrink: 0;
   white-space: nowrap;
+  margin-left: 0.5rem;
 }
 
 .btn {
@@ -387,16 +391,17 @@ body::after {
   right: 0;
   z-index: 0;
   pointer-events: none;
+  opacity: 0.8;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 680px;
+  max-width: 620px;
 }
 
 .hero-home .hero-content {
-  max-width: 620px;
+  max-width: 560px;
 }
 
 .hero-badge {
@@ -1720,6 +1725,30 @@ body.page-memory .prompt-card::before {
   background: linear-gradient(180deg, rgba(47, 111, 255, 0.1), rgba(123, 47, 255, 0.04));
 }
 
+body.page-founder .hero::before {
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 32% 30%, rgba(155, 95, 255, 0.18), transparent 46%),
+    linear-gradient(135deg, rgba(47, 111, 255, 0.08), rgba(123, 47, 255, 0.12)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 24px);
+  box-shadow: inset 0 0 0 1px rgba(155, 95, 255, 0.16);
+  transform: rotate(-6deg);
+}
+
+body.page-founder .sequence-card,
+body.page-founder .prompt-card {
+  border-color: rgba(155, 95, 255, 0.14);
+}
+
+body.page-founder .featured-wrap {
+  background: linear-gradient(135deg, rgba(123, 47, 255, 0.1), rgba(47, 111, 255, 0.07));
+  border-color: rgba(155, 95, 255, 0.24);
+}
+
+body.page-founder .prompt-card::before {
+  background: radial-gradient(circle at 20% 18%, rgba(155, 95, 255, 0.18), transparent 56%);
+}
+
 body.page-research .hero::before {
   border-radius: 30px;
   background:
@@ -2132,6 +2161,11 @@ body.page-research .featured-wrap {
   border: 1px solid rgba(123, 47, 255, 0.18);
   background: rgba(255, 255, 255, 0.025);
 }
+
+.admin-inline-note {
+  margin: -2px 0 10px;
+}
+
 
 .admin-request-list {
   display: grid;

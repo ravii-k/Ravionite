@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-supabase-url="https://gzculsnslxdsvblrtjdr.supabase.co">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ravi Kashyap</title>
+<title>Ravionite</title>
 <meta name="description" content="Software engineer, writer, and builder creating at the intersection of code, literature, and AI systems.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Mono:wght@300;400;500&amp;family=Figtree:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./theme.css?v=20260331-supabase">
+<link rel="stylesheet" href="./theme.css?v=20260406-secure">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -23,7 +23,7 @@
 </div>
 
 <nav id="navbar" class="site-nav">
-  <a class="nav-logo" href="./index.html" aria-label="Ravi Kashyap home">
+  <a class="nav-logo" href="./index.html" aria-label="Ravionite home">
     <span class="logo-mark" aria-hidden="true">
       <span class="logo-orbit logo-orbit-a"></span>
       <span class="logo-orbit logo-orbit-b"></span>
@@ -110,8 +110,17 @@
         <div class="card-link">Open collection <span>&rarr;</span></div>
       </a>
 
+      <a class="glass-card" href="./startup-founder.html" data-reveal>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(255,152,76,0.12),rgba(96,165,255,0.14));border:1px solid rgba(155,95,255,0.2)">02</div>
+        <div class="card-kicker">Open Collection</div>
+        <div class="card-title">Startup Founder Prompts</div>
+        <div class="card-desc">Seven founder-grade prompts for market sizing, offer design, growth planning, competitive mapping, and milestone-driven scale decisions.</div>
+        <div class="card-meta">founders / market strategy / growth / scale</div>
+        <div class="card-link">Open collection <span>&rarr;</span></div>
+      </a>
+
       <a class="glass-card" href="./memory-systems.html" data-reveal>
-        <div class="card-icon" style="background:linear-gradient(135deg,rgba(255,210,47,0.12),rgba(255,140,47,0.15));border:1px solid rgba(255,210,47,0.2)">02</div>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(255,210,47,0.12),rgba(255,140,47,0.15));border:1px solid rgba(255,210,47,0.2)">03</div>
         <div class="card-kicker">Open Collection</div>
         <div class="card-title">Memory Systems</div>
         <div class="card-desc">Prompt frameworks for short-term state, semantic profile, episodic memory, procedural playbooks, update policies, and memory audits.</div>
@@ -120,7 +129,7 @@
       </a>
 
       <a class="glass-card" href="./research-intelligence.html" data-reveal>
-        <div class="card-icon" style="background:linear-gradient(135deg,rgba(123,47,255,0.2),rgba(47,111,255,0.2));border:1px solid rgba(123,47,255,0.25)">03</div>
+        <div class="card-icon" style="background:linear-gradient(135deg,rgba(123,47,255,0.2),rgba(47,111,255,0.2));border:1px solid rgba(123,47,255,0.25)">04</div>
         <div class="card-kicker">Live Collection</div>
         <div class="card-title">Research Intelligence</div>
         <div class="card-desc">Nine professional-grade prompts for literature analysis, contradiction mapping, methodology review, gap finding, and synthesis.</div>
@@ -142,7 +151,7 @@
     </div>
 
     <div class="dual-grid">
-      <a class="detail-card" href="https://github.com/ravii-k/memoryweave" target="_blank" rel="noopener" data-reveal>
+      <a class="detail-card" href="https://github.com/ravii-k/memoryweave" target="_blank" rel="noopener noreferrer" data-reveal>
         <div class="detail-head">
           <div>
             <div class="card-kicker">Context Infrastructure</div>
@@ -161,7 +170,7 @@
         <div class="detail-link">View on GitHub <span>&rarr;</span></div>
       </a>
 
-      <a class="detail-card" href="https://github.com/ravii-k/R-Cliponite" target="_blank" rel="noopener" data-reveal>
+      <a class="detail-card" href="https://github.com/ravii-k/R-Cliponite" target="_blank" rel="noopener noreferrer" data-reveal>
         <div class="detail-head">
           <div>
             <div class="card-kicker">Desktop Utility</div>
@@ -180,7 +189,7 @@
         <div class="detail-link">View on GitHub <span>&rarr;</span></div>
       </a>
 
-      <a class="detail-card" href="https://github.com/ravii-k/R-Journal" target="_blank" rel="noopener" data-reveal>
+      <a class="detail-card" href="https://github.com/ravii-k/R-Journal" target="_blank" rel="noopener noreferrer" data-reveal>
         <div class="detail-head">
           <div>
             <div class="card-kicker">Native macOS App</div>
@@ -305,16 +314,17 @@
         A slow-burn romantic tragedy set between Uttarakhand and Delhi. Twenty chapters in progress, built around silence, distance, and the things people fail to say in time.
       </p>
       <div class="featured-actions" style="justify-content:center;position:relative;">
-        <a class="btn btn-outline" href="./sample-chapters.pdf" target="_blank" rel="noopener">Sample Chapters (PDF)</a>
+        <button class="btn btn-outline" id="sample-chapters-btn" type="button">Open Secure Sample Chapters</button>
         <a class="btn btn-primary" href="#notes">Read Author Notes</a>
       </div>
-      <div class="muted-note" style="position:relative;margin-top:24px;">Literary fiction / Uttarakhand + Delhi / 20 chapters drafted</div>
+      <div class="contact-status" id="sample-chapters-status" style="position:relative;margin:18px auto 0;max-width:420px;">Sample chapters now open through a signed private link instead of a public file.</div>
+      <div class="muted-note" style="position:relative;margin-top:18px;">Literary fiction / Uttarakhand + Delhi / 20 chapters drafted</div>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
-  <div class="footer-logo">Ravi Kashyap.</div>
+  <div class="footer-logo">Ravionite</div>
   <ul class="footer-links">
     <li><a href="#collections">Collections</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -325,14 +335,14 @@
   <div class="footer-copy">Delhi, India / 2026</div>
 </footer>
 
-<script src="./supabase-config.js?v=20260331-supabase"></script>
-<script src="./theme.js?v=20260331-supabase"></script>
+<script src="./theme.js?v=20260406-secure"></script>
 <script>
 const homeMarqueeItems = [
   { name: "Prompt Engineer", tag: "Primary practice", icon: "PE", bg: "rgba(123,47,255,0.15)", border: "rgba(123,47,255,0.3)" },
   { name: "Agent Workflows", tag: "Collection 01", icon: "AW", bg: "rgba(47,212,160,0.12)", border: "rgba(47,212,160,0.28)" },
-  { name: "Memory Systems", tag: "Collection 02", icon: "MS", bg: "rgba(255,184,0,0.12)", border: "rgba(255,184,0,0.28)" },
-  { name: "Research Intelligence", tag: "Collection 03", icon: "RI", bg: "rgba(123,47,255,0.15)", border: "rgba(123,47,255,0.3)" },
+  { name: "Startup Founder", tag: "Collection 02", icon: "SF", bg: "rgba(255,152,76,0.13)", border: "rgba(155,95,255,0.28)" },
+  { name: "Memory Systems", tag: "Collection 03", icon: "MS", bg: "rgba(255,184,0,0.12)", border: "rgba(255,184,0,0.28)" },
+  { name: "Research Intelligence", tag: "Collection 04", icon: "RI", bg: "rgba(123,47,255,0.15)", border: "rgba(123,47,255,0.3)" },
   { name: "memoryweave", tag: "AI memory systems", icon: "MW", bg: "rgba(47,111,255,0.15)", border: "rgba(47,111,255,0.3)" },
   { name: "R-Cliponite", tag: "Desktop utility", icon: "RC", bg: "rgba(0,196,255,0.12)", border: "rgba(0,196,255,0.28)" },
   { name: "R-Journal", tag: "Native macOS app", icon: "RJ", bg: "rgba(155,95,255,0.15)", border: "rgba(155,95,255,0.3)" },
@@ -346,11 +356,12 @@ document.addEventListener("DOMContentLoaded", function () {
   NexusTheme.setupHeroIntro();
   NexusTheme.setupReveal();
   NexusTheme.setupContactForm();
+  NexusTheme.setupSampleChapterAccess();
   NexusTheme.mountMarquee("home-marquee", homeMarqueeItems);
-  NexusTheme.createHeroScene({ canvasId: "home-hero-canvas", heroSelector: "#hero", widthRatio: 0.72 });
+  NexusTheme.createHeroScene({ canvasId: "home-hero-canvas", heroSelector: "#hero", widthRatio: 0.5, sceneScale: 0.76 });
 
   setTimeout(function () {
-    NexusTheme.animateNumber("site-stat-1", 0, 3, 1200, function (value) {
+    NexusTheme.animateNumber("site-stat-1", 0, 4, 1200, function (value) {
       return String(value).padStart(2, "0");
     });
     NexusTheme.animateNumber("site-stat-2", 0, 3, 1500, function (value) {

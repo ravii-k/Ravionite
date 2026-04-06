@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /ravionite-ops-vault-7c9d.html
+Disallow: /404.html

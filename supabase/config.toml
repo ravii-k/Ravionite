@@ -1,0 +1,4 @@
+project_id = "gzculsnslxdsvblrtjdr"
+
+[functions.public-site-gateway]
+verify_jwt = false

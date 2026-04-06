@@ -1,4 +1,42 @@
 (function () {
+  function getSupabaseUrl() {
+    return document.documentElement.dataset.supabaseUrl || "";
+  }
+
+  function getPublicGatewayEndpoint() {
+    var baseUrl = getSupabaseUrl().replace(/\/+$/, "");
+    return baseUrl ? baseUrl + "/functions/v1/public-site-gateway" : "";
+  }
+
+  async function callPublicGateway(action, payload) {
+    var endpoint = getPublicGatewayEndpoint();
+    if (!endpoint) {
+      throw new Error("Supabase project URL is missing from the page.");
+    }
+
+    var response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.assign({ action: action }, payload || {}))
+    });
+
+    var text = await response.text();
+    var data = {};
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch (_error) {
+        data = { error: text };
+      }
+    }
+
+    if (!response.ok) {
+      throw new Error((data && (data.error || data.message)) || "Unable to complete this request right now.");
+    }
+
+    return data;
+  }
+
   function animateNumber(id, from, to, duration, formatter) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -135,7 +173,7 @@
     var hero = document.querySelector(options.heroSelector || ".hero");
     if (!canvas || !hero) return null;
 
-    var widthRatio = options.widthRatio || 0.58;
+    var widthRatio = options.widthRatio || 0.5;
     var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
@@ -152,7 +190,7 @@
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(48, initialSize.w / initialSize.h, 0.1, 100);
-    camera.position.set(0, 0, 9);
+    camera.position.set(0, 0, 10);
 
     scene.add(new THREE.AmbientLight(0x280850, 2));
 
@@ -213,6 +251,7 @@
     }
 
     var root = new THREE.Group();
+    root.scale.setScalar(options.sceneScale || 0.8);
     scene.add(root);
     var animatedMaterials = [];
 
@@ -223,7 +262,7 @@
     }
 
     function makeParticleCloud(options) {
-      var count = options.count || 140;
+      var count = options.count || 96;
       var positions = new Float32Array(count * 3);
       for (var i = 0; i < count; i += 1) {
         var radius = (options.minRadius || 4.2) + Math.random() * ((options.maxRadius || 6.8) - (options.minRadius || 4.2));
@@ -301,7 +340,7 @@
         [0.6, 3.0, 0.4],
         [-3.0, -0.8, -0.5]
       ]);
-      var particles = makeParticleCloud({ count: 160, color: 0x9b5fff, size: 0.035, opacity: 0.55, minRadius: 4.5, maxRadius: 7.2 });
+      var particles = makeParticleCloud({ count: 108, color: 0x9b5fff, size: 0.032, opacity: 0.42, minRadius: 4.5, maxRadius: 7.0 });
 
       ringA.rotation.x = Math.PI / 3.2;
       ringB.rotation.x = -Math.PI / 4;
@@ -376,7 +415,7 @@
         root.add(mesh);
         return mesh;
       });
-      var particles = makeParticleCloud({ count: 130, color: 0x60a5ff, size: 0.03, opacity: 0.42, minRadius: 4.2, maxRadius: 6.4 });
+      var particles = makeParticleCloud({ count: 92, color: 0x60a5ff, size: 0.028, opacity: 0.34, minRadius: 4.2, maxRadius: 6.2 });
 
       ringA.rotation.x = Math.PI / 2.6;
       ringB.rotation.y = Math.PI / 3.4;
@@ -468,7 +507,7 @@
         root.add(plane);
         return plane;
       });
-      var particles = makeParticleCloud({ count: 110, color: 0x9b5fff, size: 0.03, opacity: 0.35, minRadius: 4.0, maxRadius: 6.1 });
+      var particles = makeParticleCloud({ count: 82, color: 0x9b5fff, size: 0.028, opacity: 0.28, minRadius: 4.0, maxRadius: 6.0 });
 
       ring.rotation.x = Math.PI / 2.8;
       ribbonGroup.add(ribbonA);
@@ -552,7 +591,7 @@
           nodes.push(node);
         }
       });
-      var particles = makeParticleCloud({ count: 120, color: 0x60a5ff, size: 0.03, opacity: 0.38, minRadius: 3.8, maxRadius: 5.8 });
+      var particles = makeParticleCloud({ count: 88, color: 0x60a5ff, size: 0.028, opacity: 0.3, minRadius: 3.8, maxRadius: 5.6 });
 
       root.add(spine);
 
@@ -571,6 +610,96 @@
             node.position.x = Math.cos(angle) * node.userData.radius;
             node.position.z = Math.sin(angle) * node.userData.radius;
             node.position.y = node.userData.layerY + Math.sin(t * 1.4 + index) * 0.12;
+          });
+        }
+      };
+    }
+
+    function buildFounderVariant() {
+      var sphere = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1.45, 3),
+        glassSurface("#7B2FFF", "#60A5FF")
+      );
+      sphere.position.x = 0.85;
+      var wire = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1.48, 2),
+        new THREE.MeshBasicMaterial({ color: 0xc4b5fd, wireframe: true, transparent: true, opacity: 0.14 })
+      );
+      wire.position.copy(sphere.position);
+      var edge = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1.58, 1),
+        new THREE.MeshBasicMaterial({ color: 0x9b5fff, wireframe: true, transparent: true, opacity: 0.08 })
+      );
+      edge.position.copy(sphere.position);
+      var ringA = new THREE.Mesh(
+        new THREE.TorusGeometry(2.12, 0.014, 12, 140),
+        new THREE.MeshBasicMaterial({ color: 0x60a5ff, transparent: true, opacity: 0.34 })
+      );
+      var ringB = new THREE.Mesh(
+        new THREE.TorusGeometry(2.42, 0.01, 12, 140),
+        new THREE.MeshBasicMaterial({ color: 0x9b5fff, transparent: true, opacity: 0.22 })
+      );
+      var ringC = new THREE.Mesh(
+        new THREE.TorusGeometry(2.78, 0.006, 12, 120),
+        new THREE.MeshBasicMaterial({ color: 0xc4b5fd, transparent: true, opacity: 0.12 })
+      );
+      [ringA, ringB, ringC].forEach(function (ring) {
+        ring.position.copy(sphere.position);
+      });
+      ringA.rotation.x = Math.PI / 2;
+      ringB.rotation.x = Math.PI / 3.2;
+      ringB.rotation.z = 0.36;
+      ringC.rotation.x = -Math.PI / 4.2;
+      ringC.rotation.z = -0.42;
+
+      var cubes = [
+        [3.6, 2.2, -0.8, 0.18],
+        [2.8, 2.8, -0.3, 0.14],
+        [-0.8, 2.1, -1.1, 0.12],
+        [4.2, 0.8, -0.5, 0.12],
+        [0.6, -2.6, 0.3, 0.18],
+        [3.4, -1.9, -0.4, 0.14]
+      ].map(function (item, index) {
+        var mesh = new THREE.Mesh(
+          new THREE.BoxGeometry(item[3], item[3], item[3]),
+          new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.46 + (index % 3) * 0.1 })
+        );
+        mesh.position.set(item[0], item[1], item[2]);
+        mesh.userData = {
+          base: item.slice(0, 3),
+          phase: index * 0.92,
+          rotX: index % 2 === 0 ? 0.003 : -0.0025,
+          rotY: 0.0035 + index * 0.0004
+        };
+        root.add(mesh);
+        return mesh;
+      });
+      var particles = makeParticleCloud({ count: 64, color: 0xffffff, size: 0.023, opacity: 0.24, minRadius: 3.6, maxRadius: 5.8 });
+
+      root.add(sphere);
+      root.add(wire);
+      root.add(edge);
+      root.add(ringA);
+      root.add(ringB);
+      root.add(ringC);
+
+      return {
+        update: function (t) {
+          sphere.rotation.y = t * 0.12;
+          sphere.rotation.x = t * 0.05;
+          wire.rotation.copy(sphere.rotation);
+          edge.rotation.y = -t * 0.08;
+          edge.rotation.x = t * 0.04;
+          ringA.rotation.z = t * 0.08;
+          ringB.rotation.z = -t * 0.05;
+          ringC.rotation.y = t * 0.035;
+          particles.rotation.y = t * 0.01;
+
+          cubes.forEach(function (cube) {
+            cube.rotation.x += cube.userData.rotX;
+            cube.rotation.y += cube.userData.rotY;
+            cube.position.x = cube.userData.base[0] + Math.sin(t * 0.42 + cube.userData.phase) * 0.08;
+            cube.position.y = cube.userData.base[1] + Math.cos(t * 0.3 + cube.userData.phase) * 0.07;
           });
         }
       };
@@ -603,7 +732,7 @@
         [-2.2, -1.9, 0.5],
         [2.1, -1.7, -0.4]
       ]);
-      var particles = makeParticleCloud({ count: 130, color: 0x9b5fff, size: 0.03, opacity: 0.45, minRadius: 4.1, maxRadius: 6.3 });
+      var particles = makeParticleCloud({ count: 96, color: 0x9b5fff, size: 0.028, opacity: 0.34, minRadius: 4.1, maxRadius: 6.1 });
 
       torusA.rotation.x = Math.PI / 2.9;
       torusA.rotation.z = Math.PI / 7;
@@ -641,6 +770,7 @@
     if (variant === "workflow") sceneVariant = buildWorkflowVariant();
     else if (variant === "narrative") sceneVariant = buildNarrativeVariant();
     else if (variant === "memory") sceneVariant = buildMemoryVariant();
+    else if (variant === "founder") sceneVariant = buildFounderVariant();
     else if (variant === "research") sceneVariant = buildResearchVariant();
     else sceneVariant = buildHomeVariant();
 
@@ -653,8 +783,8 @@
     function onMouseMove(event) {
       mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
       mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-      targetRotationY = mouseX * 0.32;
-      targetRotationX = -mouseY * 0.22;
+      targetRotationY = mouseX * 0.16;
+      targetRotationX = -mouseY * 0.1;
     }
 
     document.addEventListener("mousemove", onMouseMove);
@@ -672,7 +802,7 @@
     function animate() {
       if (!isRunning) return;
       requestAnimationFrame(animate);
-      t += 0.011;
+      t += 0.008;
 
       animatedMaterials.forEach(function (material) {
         material.uniforms.uT.value = t;
@@ -681,8 +811,8 @@
 
       sceneVariant.update(t);
 
-      root.rotation.y += (targetRotationY - root.rotation.y) * 0.055;
-      root.rotation.x += (targetRotationX - root.rotation.x) * 0.055;
+      root.rotation.y += (targetRotationY - root.rotation.y) * 0.036;
+      root.rotation.x += (targetRotationX - root.rotation.x) * 0.036;
 
       renderer.render(scene, camera);
     }
@@ -741,7 +871,6 @@
     var status = document.getElementById("contact-status");
     var submit = form ? form.querySelector('button[type="submit"]') : null;
     var honeypot = form ? form.querySelector('input[name="company"]') : null;
-    var config = window.RavioniteSupabase || null;
     var limit = 200;
     var defaultStatus = "Keep it direct. A sharp first message is easier to respond to well.";
     var limitStatus = "Word limit reached. Tighten the brief before sending.";
@@ -783,47 +912,6 @@
       return list.length;
     }
 
-    function hasConfig() {
-      return !!(
-        config &&
-        typeof config.url === "string" &&
-        /^https:\/\//.test(config.url) &&
-        config.url.indexOf("YOUR_") === -1 &&
-        typeof config.anonKey === "string" &&
-        config.anonKey &&
-        config.anonKey.indexOf("YOUR_") === -1
-      );
-    }
-
-    function buildEndpoint() {
-      var baseUrl = config.url.replace(/\/+$/, "");
-      var table = encodeURIComponent(config.table || "contact_messages");
-      return baseUrl + "/rest/v1/" + table;
-    }
-
-    async function submitToSupabase(payload) {
-      var response = await fetch(buildEndpoint(), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: config.anonKey,
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        var messageText = "Unable to send right now. Please try again in a moment.";
-        try {
-          var data = await response.json();
-          messageText = (data && (data.message || data.error_description || data.error)) || messageText;
-        } catch (error) {
-          // Keep the fallback message when the response is not JSON.
-        }
-        throw new Error(messageText);
-      }
-    }
-
     setStatus(defaultStatus, "");
     syncCounter();
     message.addEventListener("input", syncCounter);
@@ -831,26 +919,15 @@
     form.addEventListener("submit", async function (event) {
       event.preventDefault();
 
-      if (honeypot && honeypot.value.trim()) {
-        form.reset();
-        syncCounter();
-        setStatus("Sent", "success");
-        return;
-      }
-
       var wordCount = syncCounter();
       var formData = new FormData(form);
       var name = String(formData.get("name") || "").trim();
       var email = String(formData.get("email") || "").trim();
       var body = String(formData.get("message") || "").trim();
+      var company = honeypot ? honeypot.value.trim() : "";
 
       if (!name || !email || !body || !wordCount) {
         setStatus("Please fill out your name, email, and message before sending.", "warning");
-        return;
-      }
-
-      if (!hasConfig()) {
-        setStatus("Supabase is not configured yet. Add your project URL and anon key in supabase-config.js.", "warning");
         return;
       }
 
@@ -858,12 +935,12 @@
       setStatus("Sending your brief...", "");
 
       try {
-        await submitToSupabase({
+        await callPublicGateway("contact", {
           name: name,
           email: email,
           message: body,
-          word_count: wordCount,
-          source: config.source || "ravionite-website"
+          company: company,
+          source: "ravionite-website"
         });
 
         form.reset();
@@ -877,6 +954,41 @@
     });
   }
 
+  function setupSampleChapterAccess() {
+    var button = document.getElementById("sample-chapters-btn");
+    var status = document.getElementById("sample-chapters-status");
+    if (!button || !status) return;
+
+    function setStatus(text, tone) {
+      status.textContent = text;
+      status.className = tone ? "contact-status is-" + tone : "contact-status";
+    }
+
+    function setButtonState(isBusy) {
+      button.disabled = isBusy;
+      button.textContent = isBusy ? "Preparing Secure Link..." : "Open Secure Sample Chapters";
+    }
+
+    button.addEventListener("click", async function () {
+      setButtonState(true);
+      setStatus("Preparing a short-lived private link...", "");
+
+      try {
+        var payload = await callPublicGateway("sample_chapter", {});
+        if (payload && payload.url) {
+          window.open(payload.url, "_blank", "noopener,noreferrer");
+          setStatus("Secure link ready.", "success");
+        } else {
+          throw new Error("The private sample link did not return a URL.");
+        }
+      } catch (error) {
+        setStatus(error.message || "Sample chapters are temporarily unavailable.", "warning");
+      } finally {
+        setButtonState(false);
+      }
+    });
+  }
+
   window.NexusTheme = {
     animateNumber: animateNumber,
     mountMarquee: mountMarquee,
@@ -885,6 +997,7 @@
     setupHeroIntro: setupHeroIntro,
     setupReveal: setupReveal,
     setupContactForm: setupContactForm,
+    setupSampleChapterAccess: setupSampleChapterAccess,
     createHeroScene: createHeroScene,
     copyText: copyText
   };
