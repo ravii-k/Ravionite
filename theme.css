@@ -654,6 +654,32 @@ body::after {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
+#projects .dual-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#projects .detail-title {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  #projects .dual-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #projects .detail-card {
+    padding: 22px;
+  }
+
+  #projects .detail-head {
+    gap: 12px;
+  }
+
+  #projects .detail-title {
+    font-size: clamp(1.1rem, 4.8vw, 1.6rem);
+  }
+}
+
 .quote-grid {
   grid-template-columns: repeat(2, 1fr);
 }
