@@ -207,6 +207,25 @@
         </div>
         <div class="detail-link">View on GitHub <span>&rarr;</span></div>
       </a>
+
+      <a class="detail-card" href="https://github.com/ravii-k/uncensoredqwen" target="_blank" rel="noopener noreferrer" data-reveal>
+        <div class="detail-head">
+          <div>
+            <div class="card-kicker">Mac AI Client</div>
+            <div class="detail-title">QwenFree</div>
+          </div>
+          <div class="card-icon" style="background:linear-gradient(135deg,rgba(47,212,160,0.18),rgba(47,111,255,0.2));border:1px solid rgba(47,212,160,0.25)">QF</div>
+        </div>
+        <div class="detail-copy">
+          Chat from your Mac with a community 27B Qwen model running on a Kaggle GPU. Use the terminal or a browser, with an optional smaller model for local use on Apple Silicon.
+        </div>
+        <div class="tag-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Kaggle</span>
+          <span class="tag-pill">macOS</span>
+        </div>
+        <div class="detail-link">View on GitHub <span>&rarr;</span></div>
+      </a>
     </div>
   </section>
 
@@ -319,6 +338,7 @@ const homeMarqueeItems = [
   { name: "memoryweave", tag: "AI memory systems", icon: "MW", bg: "rgba(47,111,255,0.15)", border: "rgba(47,111,255,0.3)" },
   { name: "R-Cliponite", tag: "Desktop utility", icon: "RC", bg: "rgba(0,196,255,0.12)", border: "rgba(0,196,255,0.28)" },
   { name: "R-Journal", tag: "Native macOS app", icon: "RJ", bg: "rgba(155,95,255,0.15)", border: "rgba(155,95,255,0.3)" },
+  { name: "QwenFree", tag: "Mac AI client", icon: "QF", bg: "rgba(47,212,160,0.15)", border: "rgba(47,212,160,0.3)" },
   { name: "Literary Fiction", tag: "Novel in progress", icon: "LF", bg: "rgba(255,107,53,0.12)", border: "rgba(255,107,53,0.28)" },
   { name: "Field Notes", tag: "Building and writing", icon: "FN", bg: "rgba(255,107,53,0.12)", border: "rgba(255,107,53,0.28)" },
   { name: "Delhi", tag: "Home base", icon: "DL", bg: "rgba(47,111,255,0.12)", border: "rgba(47,111,255,0.25)" }
@@ -338,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
     NexusTheme.animateNumber("site-stat-1", 0, 4, 1200, function (value) {
       return String(value).padStart(2, "0");
     });
-    NexusTheme.animateNumber("site-stat-2", 0, 3, 1500, function (value) {
+    NexusTheme.animateNumber("site-stat-2", 0, document.querySelectorAll("#projects .detail-card").length, 1500, function (value) {
       return String(value).padStart(2, "0");
     });
     NexusTheme.animateNumber("site-stat-3", 0, 20, 1800, function (value) {
