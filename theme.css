@@ -654,6 +654,18 @@ body::after {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
+#projects .dual-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#projects .detail-title {
+  overflow-wrap: anywhere;
+}
+
+#projects .detail-head > .card-icon {
+  flex-shrink: 0;
+}
+
 .quote-grid {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -1869,6 +1881,24 @@ body.page-research .featured-wrap {
 }
 
 @media (max-width: 680px) {
+  #projects .dual-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  #projects .detail-card {
+    padding: 20px 14px;
+    gap: 16px;
+  }
+
+  #projects .detail-head {
+    gap: 12px;
+  }
+
+  #projects .detail-title {
+    font-size: 1.3rem;
+  }
+
   .logo-mark {
     width: 38px;
     height: 38px;
