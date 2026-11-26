@@ -1868,6 +1868,16 @@ body.page-research .featured-wrap {
   }
 }
 
+@media (max-width: 360px) {
+  #projects .detail-card {
+    padding: 20px 14px;
+  }
+
+  #projects .detail-head {
+    gap: 12px;
+  }
+}
+
 @media (max-width: 680px) {
   .logo-mark {
     width: 38px;
